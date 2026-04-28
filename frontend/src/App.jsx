@@ -1,27 +1,26 @@
-import { useState, useEffect } from 'react'
-import Registro from './componentes/Registro'
-import Dashboard from './componentes/Dashboard'
-import './App.css'
+import { useState } from 'react';
+import { authService } from './services/authService';
+import Registro from './componentes/Registro';
+import Login from './componentes/Login';
+import Dashboard from './componentes/Dashboard';
+import './App.css';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLogin, setIsLogin] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    return Boolean(localStorage.getItem('token'));
+  });
 
-  useEffect(() => {
-    // Verificar si hay token guardado al cargar
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
+  const [isLogin, setIsLogin] = useState(true);
 
   const handleAuthSuccess = () => {
     setIsAuthenticated(true);
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('authToken');
+    authService.logout();
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
+    localStorage.removeItem('authToken');
     setIsAuthenticated(false);
     setIsLogin(true);
   };
@@ -39,6 +38,7 @@ function App() {
         >
           Registro
         </button>
+
         <button
           className={`toggle-btn ${isLogin ? 'active' : ''}`}
           onClick={() => setIsLogin(true)}
@@ -46,15 +46,14 @@ function App() {
           Iniciar Sesión
         </button>
       </div>
-      
+
       {!isLogin ? (
         <Registro onAuthSuccess={handleAuthSuccess} />
       ) : (
         <Login onAuthSuccess={handleAuthSuccess} />
       )}
     </div>
-  )
+  );
 }
 
-import Login from './componentes/Login'
-export default App
+export default App;

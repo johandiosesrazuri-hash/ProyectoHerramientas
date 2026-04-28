@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { authService, authUtils } from '../services/authService';
 import '../styles/Registro.css';
 
 const Registro = (props) => {
@@ -76,28 +77,14 @@ const Registro = (props) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          nombre: registroForm.nombre,
-          email: registroForm.email,
-          password: registroForm.password,
-          rol: registroForm.rol
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el registro');
-      }
+      const data = await authService.register(
+        registroForm.nombre,
+        registroForm.email,
+        registroForm.password
+      );
 
       // Guardar token y usuario
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      authUtils.setAuth(data.token, data.user);
 
       setSuccess('¡Registro exitoso! Bienvenido.');
       setRegistroForm({

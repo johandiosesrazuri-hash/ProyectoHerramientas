@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
+import { authService, authUtils } from '../services/authService';
 import '../styles/Registro.css';
+import '../styles/Login.css';
 
 const Login = (props) => {
   const [loading, setLoading] = useState(false);
@@ -56,26 +58,10 @@ const Login = (props) => {
     setLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          email: loginForm.email,
-          password: loginForm.password
-        })
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Error en el login');
-      }
+      const data = await authService.login(loginForm.email, loginForm.password);
 
       // Guardar token y usuario
-      localStorage.setItem('authToken', data.token);
-      localStorage.setItem('user', JSON.stringify(data.user));
+      authUtils.setAuth(data.token, data.user);
 
       setSuccess('¡Login exitoso! Bienvenido.');
       setLoginForm({
@@ -98,14 +84,31 @@ const Login = (props) => {
   return (
     <div className="auth-container">
       <div className="auth-card">
-        <form onSubmit={handleLoginSubmit} className="auth-form">
+        <form onSubmit={handleLoginSubmit} className="auth-form login-form">
+          <div className="login-brand">
+            <div className="login-brand-logo">SK</div>
+            <h1>Skipline</h1>
+            <p>Sistema de Gestión de Doctores</p>
+          </div>
+
           <h2>Iniciar Sesión</h2>
 
-          {error && <div className="alert alert-error">{error}</div>}
-          {success && <div className="alert alert-success">{success}</div>}
+          {error && (
+            <div className="alert alert-error">
+              <span className="alert-icon">⚠️</span>
+              <span>{error}</span>
+            </div>
+          )}
+          {success && (
+            <div className="alert alert-success">
+              <span className="alert-icon">✅</span>
+              <span>{success}</span>
+            </div>
+          )}
 
           <div className="form-group">
             <label htmlFor="login-email">Email</label>
+            <span className="input-icon">&#x2709;</span>
             <input
               type="email"
               id="login-email"
@@ -120,6 +123,7 @@ const Login = (props) => {
 
           <div className="form-group">
             <label htmlFor="login-password">Contraseña</label>
+            <span className="input-icon">&#x1F512;</span>
             <input
               type="password"
               id="login-password"
@@ -139,6 +143,10 @@ const Login = (props) => {
           >
             {loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}
           </button>
+
+          <div className="login-footer">
+            <p>¿Olvidaste tu contraseña? <a href="#recuperar">Recupérala</a></p>
+          </div>
         </form>
       </div>
     </div>

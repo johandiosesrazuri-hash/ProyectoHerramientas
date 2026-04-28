@@ -1,9 +1,7 @@
-// API base URL
 const API_BASE_URL = 'http://localhost:8080/api';
 
-// Configuración de headers
 const getHeaders = () => {
-  const token = localStorage.getItem('authToken');
+  const token = localStorage.getItem('token');
   const headers = {
     'Content-Type': 'application/json',
   };
@@ -15,15 +13,14 @@ const getHeaders = () => {
   return headers;
 };
 
-// Servicios de Autenticación
 export const authService = {
-  // Registro
-  register: async (nombre, email, password, rol = 'USER') => {
-    const response = await fetch(`${API_BASE_URL}/auth/register`, {
-      method: 'POST',
-      headers: getHeaders(),
-      body: JSON.stringify({ nombre, email, password, rol })
-    });
+
+  register: async (nombre, email, password) => {
+  const response = await fetch(`${API_BASE_URL}/auth/register`, {
+    method: 'POST',
+    headers: getHeaders(),
+    body: JSON.stringify({ nombre, email, password })
+  });
 
     if (!response.ok) {
       const error = await response.json();
@@ -33,7 +30,7 @@ export const authService = {
     return await response.json();
   },
 
-  // Login
+
   login: async (email, password) => {
     const response = await fetch(`${API_BASE_URL}/auth/login`, {
       method: 'POST',
@@ -49,16 +46,15 @@ export const authService = {
     return await response.json();
   },
 
-  // Logout
+
   logout: () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
   }
 };
 
-// Servicios de Usuario
 export const userService = {
-  // Obtener usuario actual
+  
   getCurrentUser: async () => {
     const response = await fetch(`${API_BASE_URL}/users/me`, {
       method: 'GET',
@@ -107,12 +103,12 @@ export const userService = {
 export const authUtils = {
   // Verificar si el usuario está autenticado
   isAuthenticated: () => {
-    return !!localStorage.getItem('authToken');
+    return !!localStorage.getItem('token');
   },
 
   // Obtener token
   getToken: () => {
-    return localStorage.getItem('authToken');
+    return localStorage.getItem('token');
   },
 
   // Obtener usuario
@@ -123,13 +119,13 @@ export const authUtils = {
 
   // Establecer token y usuario
   setAuth: (token, user) => {
-    localStorage.setItem('authToken', token);
+    localStorage.setItem('token', token);
     localStorage.setItem('user', JSON.stringify(user));
   },
 
   // Limpiar autenticación
   clearAuth: () => {
-    localStorage.removeItem('authToken');
+    localStorage.removeItem('token');
     localStorage.removeItem('user');
   },
 

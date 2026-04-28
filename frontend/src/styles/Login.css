@@ -1,0 +1,160 @@
+/* =========================================================
+   Login.css — Mejoras visuales específicas para Login
+   (Extiende la base de Registro.css; no la reemplaza)
+   ========================================================= */
+
+/* Tarjeta más moderna */
+.auth-card {
+  border-radius: 20px;
+  box-shadow:
+    0 24px 48px rgba(0, 0, 0, 0.18),
+    0 2px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  overflow: visible;
+}
+
+/* Logo de Skipline */
+.login-brand {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.login-brand-logo {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  color: #fff;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: 22px;
+  box-shadow: 0 10px 22px rgba(99, 102, 241, 0.35);
+  margin-bottom: 12px;
+}
+
+.login-brand h1 {
+  margin: 0;
+  font-size: 22px;
+  color: #1f2937;
+  letter-spacing: -0.3px;
+}
+
+.login-brand p {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #64748b;
+}
+
+/* Inputs con iconos */
+.form-group {
+  position: relative;
+}
+
+.form-group .input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #94a3b8;
+  font-size: 16px;
+  pointer-events: none;
+  line-height: 1;
+}
+
+/* Ajustar padding de inputs para dejar espacio al icono */
+.login-form .form-group input {
+  padding-left: 42px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  background: #f8fafc;
+  transition: all 0.25s ease;
+}
+
+.login-form .form-group input:focus {
+  background: #fff;
+  border-color: #6366f1;
+  box-shadow: 0 0 0 4px rgba(99, 102, 241, 0.12);
+}
+
+/* Botón primario mejorado */
+.btn-primary {
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  border-radius: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.28);
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 28px rgba(79, 70, 229, 0.35);
+}
+
+/* Alertas con borde semántico e icono */
+.alert {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+
+.alert-icon {
+  flex-shrink: 0;
+  font-size: 18px;
+  line-height: 1;
+  margin-top: 1px;
+}
+
+.alert-error {
+  background: #fef2f2;
+  color: #991b1b;
+  border-left-color: #ef4444;
+}
+
+.alert-success {
+  background: #f0fdf4;
+  color: #166534;
+  border-left-color: #22c55e;
+}
+
+/* Pie de tarjeta */
+.login-footer {
+  text-align: center;
+  margin-top: 18px;
+  font-size: 13px;
+  color: #64748b;
+}
+
+.login-footer a {
+  color: #4f46e5;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-footer a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive fino */
+@media (max-width: 480px) {
+  .auth-card {
+    border-radius: 16px;
+  }
+
+  .login-brand-logo {
+    width: 48px;
+    height: 48px;
+    font-size: 18px;
+  }
+
+  .login-brand h1 {
+    font-size: 20px;
+  }
+}
+
