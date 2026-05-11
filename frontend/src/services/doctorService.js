@@ -26,20 +26,28 @@ const toQueryString = (params = {}) => {
   return raw ? `?${raw}` : '';
 };
 
+const createHttpError = (response, fallbackMessage) => {
+  const error = new Error(fallbackMessage);
+  error.status = response.status;
+  error.statusText = response.statusText;
+  return error;
+};
+
 export const doctorService = {
-  listDoctors: async ({ search, especialidad } = {}) => {
+  listDoctors: async ({ search, especialidad, signal } = {}) => {
     const query = toQueryString({ search, especialidad });
     const response = await fetch(`${API_BASE_URL}/doctores${query}`, {
       method: 'GET',
-      headers: getHeaders()
+      headers: getHeaders(),
+      signal
     });
 
     if (!response.ok) {
       if (response.status === 401) {
-        throw new Error('Necesitas iniciar sesion para ver los doctores.');
+        throw createHttpError(response, 'Necesitas iniciar sesion para ver los doctores.');
       }
 
-      throw new Error('No fue posible obtener los doctores desde la base de datos.');
+      throw createHttpError(response, 'No fue posible obtener los doctores desde la base de datos.');
     }
 
     return response.json();

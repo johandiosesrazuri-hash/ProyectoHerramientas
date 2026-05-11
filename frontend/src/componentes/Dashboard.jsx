@@ -3,7 +3,7 @@ import { doctorService } from '../services/doctorService';
 import logoSkipline from '../assets/images/logo.png';
 import '../styles/Dashboard.css';
 
-const Dashboard = (props) => {
+const Dashboard = ({ onLogout }) => {
   const [doctores, setDoctores] = useState([]);
   const [search, setSearch] = useState('');
   const [especialidad, setEspecialidad] = useState('Todas');
@@ -11,25 +11,48 @@ const Dashboard = (props) => {
   const [error, setError] = useState('');
 
   useEffect(() => {
-    loadDoctores();
-  }, [search, especialidad]);
+    const controller = new AbortController();
 
-  const loadDoctores = async () => {
-    try {
-      setLoading(true);
-      setError('');
-      const payload = await doctorService.listDoctors({
-        search: search.trim() || undefined,
-        especialidad: especialidad === 'Todas' ? undefined : especialidad
-      });
-      setDoctores(Array.isArray(payload) ? payload : []);
-    } catch (err) {
-      setError(err.message || 'No se pudieron cargar los doctores.');
-      setDoctores([]);
-    } finally {
-      setLoading(false);
-    }
-  };
+    const timeoutId = window.setTimeout(async () => {
+      try {
+        setLoading(true);
+        setError('');
+
+        const payload = await doctorService.listDoctors({
+          search: search.trim() || undefined,
+          especialidad: especialidad === 'Todas' ? undefined : especialidad,
+          signal: controller.signal
+        });
+
+        setDoctores(Array.isArray(payload) ? payload : []);
+      } catch (err) {
+        if (err.name === 'AbortError') {
+          return;
+        }
+
+        if (err.status === 401) {
+          setDoctores([]);
+          setError('Tu sesion expiró. Vuelve a iniciar sesión.');
+          if (onLogout) {
+            onLogout();
+          }
+          return;
+        }
+
+        setError(err.message || 'No se pudieron cargar los doctores.');
+        setDoctores([]);
+      } finally {
+        if (!controller.signal.aborted) {
+          setLoading(false);
+        }
+      }
+    }, 250);
+
+    return () => {
+      controller.abort();
+      window.clearTimeout(timeoutId);
+    };
+  }, [onLogout, search, especialidad]);
 
   const especialidades = useMemo(() => {
     const values = doctores

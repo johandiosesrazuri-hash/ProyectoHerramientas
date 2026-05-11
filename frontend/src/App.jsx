@@ -1,20 +1,26 @@
 import { useState, useEffect } from 'react'
 import Registro from './componentes/Registro'
 import Dashboard from './componentes/Dashboard'
+import Login from './componentes/Login'
 import './App.css'
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => !!localStorage.getItem('authToken'));
   const [isLogin, setIsLogin] = useState(true);
 
   useEffect(() => {
     setIsLogin(true);
 
-    // Verificar si hay token guardado al cargar
-    const token = localStorage.getItem('authToken');
-    if (token) {
-      setIsAuthenticated(true);
-    }
+    const syncAuthState = () => {
+      setIsAuthenticated(!!localStorage.getItem('authToken'));
+    };
+
+    window.addEventListener('storage', syncAuthState);
+    syncAuthState();
+
+    return () => {
+      window.removeEventListener('storage', syncAuthState);
+    };
   }, []);
 
   const handleAuthSuccess = () => {
@@ -49,5 +55,4 @@ function App() {
   )
 }
 
-import Login from './componentes/Login'
 export default App
