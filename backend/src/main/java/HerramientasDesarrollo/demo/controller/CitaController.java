@@ -8,11 +8,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,5 +50,35 @@ public class CitaController {
             Authentication authentication
     ) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citaService.createCita(request, authentication));
+    }
+
+    /**
+        * Obtiene el historial de citas del usuario autenticado (paciente).
+     */
+    @GetMapping("/historial")
+    @PreAuthorize("hasRole('PACIENTE') or hasRole('DOCTOR')")
+    @Operation(summary = "Obtener historial de citas", description = "Retorna todas las citas del usuario autenticado ordenadas por fecha descendente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Historial obtenido"),
+            @ApiResponse(responseCode = "401", description = "No autenticado"),
+            @ApiResponse(responseCode = "403", description = "Sin permisos")
+    })
+    public ResponseEntity<List<CitaResponse>> getHistorial(Authentication authentication) {
+        return ResponseEntity.ok(citaService.getCitasByUsuarioId(authentication));
+    }
+
+    /**
+        * Obtiene el historial de citas del doctor autenticado.
+     */
+    @GetMapping("/doctor/historial")
+    @PreAuthorize("hasRole('DOCTOR')")
+    @Operation(summary = "Obtener historial de citas del doctor", description = "Retorna todas las citas del doctor autenticado ordenadas por fecha descendente")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Historial obtenido"),
+            @ApiResponse(responseCode = "401", description = "No autenticado"),
+            @ApiResponse(responseCode = "403", description = "Solo doctores pueden acceder")
+    })
+    public ResponseEntity<List<CitaResponse>> getHistorialDoctor(Authentication authentication) {
+        return ResponseEntity.ok(citaService.getCitasByDoctorId(authentication));
     }
 }

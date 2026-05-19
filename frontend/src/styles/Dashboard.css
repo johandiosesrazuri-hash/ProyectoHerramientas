@@ -73,6 +73,42 @@
   transform: translateY(0);
 }
 
+.dashboard-nav {
+  max-width: 1240px;
+  margin: 0 auto 32px;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.nav-btn {
+  padding: 12px 24px;
+  border: 2px solid rgba(42, 125, 225, 0.2);
+  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(255, 255, 255, 0.6) 100%);
+  color: var(--color-text);
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+}
+
+.nav-btn:hover {
+  border-color: var(--color-primary);
+  background: linear-gradient(135deg, var(--color-surface) 0%, rgba(255, 255, 255, 0.8) 100%);
+  box-shadow: 0 8px 20px rgba(42, 125, 225, 0.1);
+}
+
+.nav-btn.active {
+  background: linear-gradient(135deg, var(--color-primary), #5aa3e6);
+  color: var(--color-surface);
+  border-color: var(--color-primary);
+  box-shadow: 0 8px 24px rgba(42, 125, 225, 0.25);
+}
+
 .stats-grid,
 .filters-box,
 .doctores-grid,

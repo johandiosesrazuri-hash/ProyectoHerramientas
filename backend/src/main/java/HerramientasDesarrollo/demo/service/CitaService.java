@@ -4,6 +4,7 @@ import HerramientasDesarrollo.demo.dto.cita.CitaResponse;
 import HerramientasDesarrollo.demo.dto.cita.CreateCitaRequest;
 import HerramientasDesarrollo.demo.entity.Cita;
 import HerramientasDesarrollo.demo.entity.CitaEstado;
+import HerramientasDesarrollo.demo.entity.Doctor;
 import HerramientasDesarrollo.demo.entity.Slot;
 import HerramientasDesarrollo.demo.entity.SlotEstado;
 import HerramientasDesarrollo.demo.entity.Usuario;
@@ -13,6 +14,8 @@ import HerramientasDesarrollo.demo.repository.CitaRepository;
 import HerramientasDesarrollo.demo.repository.SlotRepository;
 import HerramientasDesarrollo.demo.repository.UsuarioRepository;
 import HerramientasDesarrollo.demo.security.UserPrincipal;
+import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
@@ -56,15 +59,53 @@ public class CitaService {
 
         Cita saved = citaRepository.save(cita);
 
+        return mapCitaToCitaResponse(saved);
+    }
+
+    public List<CitaResponse> getCitasByUsuarioId(Authentication authentication) {
+        Long usuarioId = getAuthenticatedUserId(authentication);
+        List<Cita> citas = citaRepository.findByUsuarioIdOrderByCreatedAtDesc(usuarioId);
+        return citas.stream()
+                .map(this::mapCitaToCitaResponse)
+                .collect(Collectors.toList());
+    }
+
+    public List<CitaResponse> getCitasByDoctorId(Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserPrincipal principal)) {
+            throw new IllegalStateException("Usuario no autenticado");
+        }
+
+        Usuario usuario = principal.getUsuario();
+        if (!usuario.getRol().name().equals("DOCTOR")) {
+            throw new IllegalStateException("Solo los doctores pueden ver su historial de citas");
+        }
+
+        // Asumimos que usuario_id = doctor_id para doctores
+        Long doctorId = usuario.getId();
+        List<Cita> citas = citaRepository.findByDoctorIdOrderByCreatedAtDesc(doctorId);
+        return citas.stream()
+                .map(this::mapCitaToCitaResponse)
+                .collect(Collectors.toList());
+    }
+
+    private CitaResponse mapCitaToCitaResponse(Cita cita) {
+        Doctor doctor = cita.getSlot().getDoctor();
+        Usuario usuario = cita.getUsuario();
+        
         return CitaResponse.builder()
-                .id(saved.getId())
-                .slotId(saved.getSlot().getId())
-                .doctorId(saved.getSlot().getDoctor().getId())
-                .fecha(saved.getSlot().getFecha())
-                .horaInicio(saved.getSlot().getHoraInicio())
-                .horaFin(saved.getSlot().getHoraFin())
-                .estado(saved.getEstado())
-                .motivo(saved.getMotivo())
+                .id(cita.getId())
+                .slotId(cita.getSlot().getId())
+                .doctorId(doctor.getId())
+                .usuarioId(usuario.getId())
+                .fecha(cita.getSlot().getFecha())
+                .horaInicio(cita.getSlot().getHoraInicio())
+                .horaFin(cita.getSlot().getHoraFin())
+                .estado(cita.getEstado())
+                .motivo(cita.getMotivo())
+                .pacienteNombre(usuario.getNombre())
+                .pacienteEmail(usuario.getEmail())
+                .doctorNombre(doctor.getNombre() + " " + doctor.getApellido())
+                .createdAt(cita.getCreatedAt())
                 .build();
     }
 
