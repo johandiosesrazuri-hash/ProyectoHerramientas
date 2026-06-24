@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SlotController {
 
     private final SlotService slotService;
+    private final HerramientasDesarrollo.demo.repository.SlotRepository slotRepository;
 
     /**
         * Materializa agenda en bloques de 30 minutos dentro de un rango de fechas,
@@ -53,9 +54,20 @@ public class SlotController {
             @org.springframework.web.bind.annotation.RequestParam(required = false) Long doctorId,
             @org.springframework.web.bind.annotation.RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate fecha
     ) {
-        // Para simplificar, se expone todo el servicio a través de DoctorService u otro si es necesario, pero
-        // como no tenemos findAll en SlotService o SlotRepository, lo agregamos aquí delegando en un método simple:
-        // Idealmente lo pondríamos en SlotService, pero lo puedo resolver rápido aquí
-        return ResponseEntity.status(org.springframework.http.HttpStatus.NOT_IMPLEMENTED).build();
+        java.util.List<HerramientasDesarrollo.demo.entity.Slot> slots;
+        if (doctorId != null && fecha != null) {
+            slots = slotRepository.findByDoctorIdAndFechaOrderByHoraInicioAsc(doctorId, fecha);
+        } else {
+            slots = slotRepository.findAll();
+        }
+        java.util.List<HerramientasDesarrollo.demo.dto.slot.DoctorSlotResponse> response = slots.stream()
+                .map(slot -> HerramientasDesarrollo.demo.dto.slot.DoctorSlotResponse.builder()
+                        .id(slot.getId())
+                        .horaInicio(slot.getHoraInicio())
+                        .horaFin(slot.getHoraFin())
+                        .estado(slot.getEstado())
+                        .build())
+                .toList();
+        return ResponseEntity.ok(response);
     }
 }

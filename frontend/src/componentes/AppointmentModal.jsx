@@ -47,7 +47,10 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
         setCargandoHorarios(true);
         setErrorHorarios(null);
 
-        const fechaFormato = selectedDate.toISOString().split('T')[0];
+        const year = selectedDate.getFullYear();
+        const month = String(selectedDate.getMonth() + 1).padStart(2, '0');
+        const day = String(selectedDate.getDate()).padStart(2, '0');
+        const fechaFormato = `${year}-${month}-${day}`;
         const slotsDelBackend = await citasService.obtenerSlotsDisponibles(
           doctor.id,
           fechaFormato
@@ -155,7 +158,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
   };
 
   const isDateAvailable = (date) => {
-    return date.getDay() !== 0 && date.getDay() !== 6;
+    return true; // Habilitamos todos los días, la disponibilidad real se obtiene de la API de slots
   };
 
   const isDateSelected = (date) => {

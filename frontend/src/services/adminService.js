@@ -113,5 +113,69 @@ export const adminService = {
   deleteEspecialidad: async (id) => {
     const res = await fetch(`${API_BASE_URL}/especialidades/${id}`, { method: 'DELETE', headers: getHeaders() });
     if (!res.ok) throw new Error('Error al eliminar especialidad');
+  },
+
+  // Crear Usuario (Admin)
+  createUsuario: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/users/create`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Error al crear usuario');
+    }
+    return res.json();
+  },
+
+  // Horarios Base
+  getHorarios: async (doctorId) => {
+    const url = doctorId ? `${API_BASE_URL}/horarios?doctorId=${doctorId}` : `${API_BASE_URL}/horarios`;
+    const res = await fetch(url, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Error al obtener horarios base');
+    return res.json();
+  },
+  createHorario: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/horarios`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Error al crear horario');
+    }
+    return res.json();
+  },
+  deleteHorario: async (id) => {
+    const res = await fetch(`${API_BASE_URL}/horarios/${id}`, { method: 'DELETE', headers: getHeaders() });
+    if (!res.ok) throw new Error('Error al eliminar horario');
+  },
+
+  // Slots de Citas
+  getSlots: async (doctorId, fecha) => {
+    let url = `${API_BASE_URL}/slots`;
+    if (doctorId || fecha) {
+      const params = new URLSearchParams();
+      if (doctorId) params.append('doctorId', doctorId);
+      if (fecha) params.append('fecha', fecha);
+      url += `?${params.toString()}`;
+    }
+    const res = await fetch(url, { headers: getHeaders() });
+    if (!res.ok) throw new Error('Error al obtener slots');
+    return res.json();
+  },
+  generateSlots: async (data) => {
+    const res = await fetch(`${API_BASE_URL}/slots/generar`, {
+      method: 'POST',
+      headers: getHeaders(),
+      body: JSON.stringify(data)
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({}));
+      throw new Error(err.message || 'Error al generar slots');
+    }
+    return res.json();
   }
 };

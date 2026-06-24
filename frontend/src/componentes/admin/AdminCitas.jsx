@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import { adminService } from '../../services/adminService';
 import { CheckCircle, XCircle } from 'lucide-react';
+import { useToast } from '../Toast';
 import '../../styles/Admin.css';
 
 const AdminCitas = () => {
   const [citas, setCitas] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { showToast } = useToast();
 
   useEffect(() => {
     loadCitas();
@@ -18,7 +20,7 @@ const AdminCitas = () => {
       setCitas(data);
     } catch (error) {
       console.error(error);
-      alert('Error cargando citas');
+      showToast('Error al cargar citas', 'error');
     } finally {
       setLoading(false);
     }
@@ -29,8 +31,9 @@ const AdminCitas = () => {
       try {
         const updated = await adminService.updateCitaEstado(id, estado);
         setCitas(citas.map(c => c.id === id ? updated : c));
+        showToast(`Cita actualizada a ${estado} correctamente`, 'success');
       } catch (err) {
-        alert('Error al actualizar estado');
+        showToast('Error al actualizar estado de la cita', 'error');
       }
     }
   };

@@ -11,6 +11,7 @@ import AdminUsuarios from './admin/AdminUsuarios';
 import AdminDoctores from './admin/AdminDoctores';
 import AdminCitas from './admin/AdminCitas';
 import AdminEspecialidades from './admin/AdminEspecialidades';
+import AdminHorarios from './admin/AdminHorarios';
 
 const Dashboard = (props) => {
   const [doctores, setDoctores] = useState([]);
@@ -22,9 +23,34 @@ const Dashboard = (props) => {
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [currentView, setCurrentView] = useState('medicos');
 
+  const [especialidadesList, setEspecialidadesList] = useState(['Todas']);
+
   useEffect(() => {
     loadDoctores();
   }, [search, especialidad]);
+
+  useEffect(() => {
+    loadEspecialidades();
+  }, []);
+
+  const loadEspecialidades = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const res = await fetch('http://localhost:8080/api/especialidades', {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const names = data.map(item => item.nombre);
+        setEspecialidadesList(['Todas', ...names]);
+      }
+    } catch (err) {
+      console.error('Error al cargar especialidades:', err);
+    }
+  };
 
   const loadDoctores = async () => {
     try {
@@ -42,14 +68,6 @@ const Dashboard = (props) => {
       setLoading(false);
     }
   };
-
-  const especialidades = useMemo(() => {
-    const values = doctores
-      .flatMap((doctor) => (doctor.especialidad || '').split(','))
-      .map((item) => item.trim())
-      .filter(Boolean);
-    return ['Todas', ...new Set(values)];
-  }, [doctores]);
 
   const doctoresDisponibles = useMemo(
     () => doctores.filter((doctor) => doctor.estado === 'DISPONIBLE').length,
@@ -93,7 +111,7 @@ const Dashboard = (props) => {
         </article>
         <article className="stat-card">
           <p className="stat-label">Especialidades</p>
-          <p className="stat-value">{Math.max(especialidades.length - 1, 0)}</p>
+          <p className="stat-value">{Math.max(especialidadesList.length - 1, 0)}</p>
         </article>
         <article className="stat-card">
           <p className="stat-label">Total de Doctores</p>
@@ -120,7 +138,7 @@ const Dashboard = (props) => {
             value={especialidad}
             onChange={(e) => setEspecialidad(e.target.value)}
           >
-            {especialidades.map((item) => (
+            {especialidadesList.map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>
@@ -185,7 +203,9 @@ const Dashboard = (props) => {
       case 'admin-usuarios':
         return <AdminUsuarios />;
       case 'admin-doctores':
-        return <AdminDoctores />;
+        return <AdminDoctores onNavigate={handleNavigate} />;
+      case 'admin-horarios':
+        return <AdminHorarios />;
       case 'admin-citas':
         return <AdminCitas />;
       case 'admin-especialidades':
