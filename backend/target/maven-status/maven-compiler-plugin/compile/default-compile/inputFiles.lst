@@ -1,22 +1,57 @@
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\AuthController.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\UserController.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\DemoApplication.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\AuthResponse.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\LoginRequest.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\RegisterRequest.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\common\ErrorResponse.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\CreateUserRequest.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\UserResponse.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Role.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Usuario.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\EmailAlreadyExistsException.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\GlobalExceptionHandler.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\UnauthorizedRoleAssignmentException.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\UsuarioRepository.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\Security\CustomUserDetailsService.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\Security\JwtAuthenticationFilter.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\Security\JwtService.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\Security\SecurityConfig.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\Security\UserPrincipal.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\AuthService.java
-C:\Users\RIPLEY I\Desktop\Proyectos - front - restpe\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\UserService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\config\CorsConfig.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\AuthController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\CitaController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\DoctorController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\EspecialidadController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\HorarioController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\SlotController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\UserController.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\DemoApplication.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\AuthResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\LoginRequest.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\RegisterRequest.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\cita\CitaResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\cita\CreateCitaRequest.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\common\ErrorResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\doctor\DoctorListResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\especialidad\EspecialidadResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\horario\CreateHorarioRequest.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\horario\HorarioResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\slot\DoctorSlotResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\slot\GenerateSlotsRequest.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\slot\GenerateSlotsResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\CreateUserRequest.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\UserResponse.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Cita.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\CitaEstado.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Doctor.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Especialidad.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\HorarioBase.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Role.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Slot.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\SlotEstado.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Usuario.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\EmailAlreadyExistsException.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\GlobalExceptionHandler.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\ResourceNotFoundException.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\ScheduleOverlapException.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\SlotNotAvailableException.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\exception\UnauthorizedRoleAssignmentException.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\CitaRepository.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\DoctorRepository.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\EspecialidadRepository.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\HorarioBaseRepository.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\SlotRepository.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\UsuarioRepository.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\security\CustomUserDetailsService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\security\JwtAuthenticationFilter.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\security\JwtService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\security\SecurityConfig.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\security\UserPrincipal.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\AuthService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\CitaService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\DoctorService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\EspecialidadService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\HorarioService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\SlotService.java
+C:\Users\JESÚS BENITES\Downloads\ProyectoHerramientas\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\UserService.java

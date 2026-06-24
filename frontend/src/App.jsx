@@ -50,5 +50,4 @@ function App() {
   )
 }
 
-import Login from './componentes/Login'
 export default App

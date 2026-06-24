@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useState } from 'react';
 import { doctorService } from '../services/doctorService';
+import { especialidadService } from '../services/especialidadService';
 import AppointmentModal from './AppointmentModal';
 import Sidebar from './Sidebar';
 import logoSkipline from '../assets/images/logo.png';
@@ -14,10 +15,19 @@ const Dashboard = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [currentView, setCurrentView] = useState('medicos');
+  const [especialidadesAPI, setEspecialidadesAPI] = useState([]);
+  const [loadingEspecialidades, setLoadingEspecialidades] = useState(false);
+  const [errorEspecialidades, setErrorEspecialidades] = useState('');
 
   useEffect(() => {
     loadDoctores();
   }, [search, especialidad]);
+
+  useEffect(() => {
+    if (currentView === 'especialidades') {
+      loadEspecialidades();
+    }
+  }, [currentView]);
 
   const loadDoctores = async () => {
     try {
@@ -33,6 +43,20 @@ const Dashboard = (props) => {
       setDoctores([]);
     } finally {
       setLoading(false);
+    }
+  };
+
+  const loadEspecialidades = async () => {
+    try {
+      setLoadingEspecialidades(true);
+      setErrorEspecialidades('');
+      const payload = await especialidadService.getAllEspecialidades();
+      setEspecialidadesAPI(Array.isArray(payload) ? payload : []);
+    } catch (err) {
+      setErrorEspecialidades(err.message || 'No se pudieron cargar las especialidades.');
+      setEspecialidadesAPI([]);
+    } finally {
+      setLoadingEspecialidades(false);
     }
   };
 
@@ -177,8 +201,109 @@ const Dashboard = (props) => {
         return (
           <section className="content-section">
             <h2>Mi Perfil</h2>
-            <div className="profile-card">
-              <p className="placeholder-text">Tu información de perfil aparecerá aquí</p>
+            <div className="profile-modern-wrapper">
+              {/* Tarjeta Principal - Profile Card */}
+              <div className="profile-card-modern">
+                <div className="profile-card-header">
+                  <div className="profile-card-avatar">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSZxcw7x7iYg7UQGBwvzZW8znYaH9V7zJzrl6JyXul1Fg&s" alt="Foto de perfil" />
+                    <div className="status-indicator">
+                      <span className="status-dot"></span>
+                      <span className="status-text">Activo</span>
+                    </div>
+                  </div>
+                  <div className="profile-card-info">
+                    <h3>Jesus Benites</h3>
+                    <p className="card-patient-id">ID: P-12345</p>
+                    <p className="card-meta">26 años • Hombre • A+</p>
+                    <button className="btn-edit-profile">Editar Perfil</button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Grid de Secciones */}
+              <div className="profile-sections-grid">
+                {/* Datos de Contacto */}
+                <div className="profile-section">
+                  <div className="section-header">
+                    <h4>Datos de Contacto</h4>
+                  </div>
+                  <div className="section-content">
+                    <div className="info-field">
+                      <span className="field-icon">📧</span>
+                      <div>
+                        <p className="field-label">Correo Electrónico</p>
+                        <p className="field-value">jesus.benites@email.com</p>
+                      </div>
+                    </div>
+                    <div className="info-field">
+                      <span className="field-icon">📱</span>
+                      <div>
+                        <p className="field-label">Teléfono Principal</p>
+                        <p className="field-value">+51 926 380 584</p>
+                      </div>
+                    </div>
+                    <div className="info-field">
+                      <span className="field-icon">☎️</span>
+                      <div>
+                        <p className="field-label">Contacto Emergencia</p>
+                        <p className="field-value">+51 92 345 678</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Datos Médicos */}
+                <div className="profile-section">
+                  <div className="section-header">
+                    <h4>Información Médica</h4>
+                  </div>
+                  <div className="section-content">
+                    <div className="info-group">
+                      <p className="group-label">Alergias</p>
+                      <div className="badges-container">
+                        <span className="badge-red">Penicilina</span>
+                        <span className="badge-red">Polen</span>
+                      </div>
+                    </div>
+                    <div className="info-group">
+                      <p className="group-label">Condiciones</p>
+                      <div className="badges-container">
+                        <span className="badge-info">Asma Controlado</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Seguro Médico */}
+                <div className="profile-section">
+                  <div className="section-header">
+                    <h4>Seguro Médico</h4>
+                  </div>
+                  <div className="section-content">
+                    <div className="info-field">
+                      <span className="field-icon">🏥</span>
+                      <div>
+                        <p className="field-label">Proveedor</p>
+                        <p className="field-value">EsSalud</p>
+                      </div>
+                    </div>
+                    <div className="info-field">
+                      <span className="field-icon">📋</span>
+                      <div>
+                        <p className="field-label">Número de Póliza</p>
+                        <p className="field-value">ESS-98765-A</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Botones de Acción */}
+              <div className="profile-actions">
+                <button className="btn-action-secondary">Cambiar Contraseña</button>
+                <button className="btn-action-primary">Reservar Cita</button>
+              </div>
             </div>
           </section>
         );
@@ -197,9 +322,31 @@ const Dashboard = (props) => {
         return (
           <section className="content-section">
             <h2>Especialidades</h2>
-            <div className="specialties-card">
-              <p className="placeholder-text">Catálogo de especialidades disponibles</p>
-            </div>
+            <p className="subtitle">Catálogo de especialidades disponibles</p>
+            
+            {loadingEspecialidades && <p className="panel-state">Cargando especialidades...</p>}
+            {!loadingEspecialidades && errorEspecialidades && (
+              <p className="panel-state panel-error">{errorEspecialidades}</p>
+            )}
+            {!loadingEspecialidades && !errorEspecialidades && especialidadesAPI.length === 0 && (
+              <p className="panel-state">No hay especialidades para mostrar.</p>
+            )}
+
+            {!loadingEspecialidades && !errorEspecialidades && especialidadesAPI.length > 0 && (
+              <div className="especialidades-grid">
+                {especialidadesAPI.map((esp) => (
+                  <article key={esp.id} className="especialidad-card">
+                    <div className="especialidad-header">
+                      <h3>{esp.nombre}</h3>
+                    </div>
+                    <p className="especialidad-description">{esp.descripcion}</p>
+                    <div className="especialidad-footer">
+                      <span className="especialidad-id">ID: {esp.id}</span>
+                    </div>
+                  </article>
+                ))}
+              </div>
+            )}
           </section>
         );
 
