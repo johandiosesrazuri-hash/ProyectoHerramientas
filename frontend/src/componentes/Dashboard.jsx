@@ -6,6 +6,12 @@ import Sidebar from './Sidebar';
 import logoSkipline from '../assets/images/logo.png';
 import '../styles/Dashboard.css';
 
+import AdminDashboard from './admin/AdminDashboard';
+import AdminUsuarios from './admin/AdminUsuarios';
+import AdminDoctores from './admin/AdminDoctores';
+import AdminCitas from './admin/AdminCitas';
+import AdminEspecialidades from './admin/AdminEspecialidades';
+
 const Dashboard = (props) => {
   const [doctores, setDoctores] = useState([]);
   const [search, setSearch] = useState('');
@@ -174,6 +180,17 @@ const Dashboard = (props) => {
 
   const renderContent = () => {
     switch (currentView) {
+      case 'admin-dashboard':
+        return <AdminDashboard />;
+      case 'admin-usuarios':
+        return <AdminUsuarios />;
+      case 'admin-doctores':
+        return <AdminDoctores />;
+      case 'admin-citas':
+        return <AdminCitas />;
+      case 'admin-especialidades':
+        return <AdminEspecialidades />;
+        
       case 'perfil':
         return (
           <section className="content-section">
@@ -190,16 +207,6 @@ const Dashboard = (props) => {
             <h2>Historial de Citas</h2>
             <div className="history-card">
               <HistorialCitas />
-            </div>
-          </section>
-        );
-
-      case 'especialidades':
-        return (
-          <section className="content-section">
-            <h2>Especialidades</h2>
-            <div className="specialties-card">
-              <p className="placeholder-text">Catálogo de especialidades disponibles</p>
             </div>
           </section>
         );

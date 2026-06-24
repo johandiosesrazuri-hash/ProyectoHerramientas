@@ -49,7 +49,9 @@ public class SecurityConfig {
                             "/api/doctores/**",
                             "/api/citas/**",
                             "/api/horarios/**",
-                            "/api/slots/**"
+                            "/api/slots/**",
+                            "/api/especialidades/**",
+                            "/api/admin/**"
                         ).authenticated()
                         .anyRequest().authenticated()
                 )

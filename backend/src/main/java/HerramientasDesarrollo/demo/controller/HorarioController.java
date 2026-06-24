@@ -55,4 +55,24 @@ public class HorarioController {
 
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
+
+    @org.springframework.web.bind.annotation.GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Listar horarios base", description = "Retorna horarios base, opcionalmente por doctorId")
+    public ResponseEntity<java.util.List<HorarioResponse>> getHorarios(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Long doctorId
+    ) {
+        if (doctorId != null) {
+            return ResponseEntity.ok(horarioService.findByDoctorId(doctorId));
+        }
+        return ResponseEntity.ok(horarioService.findAll());
+    }
+
+    @org.springframework.web.bind.annotation.DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Eliminar horario base", description = "Elimina un bloque de horario base (solo ADMIN)")
+    public ResponseEntity<Void> deleteHorario(@org.springframework.web.bind.annotation.PathVariable Long id) {
+        horarioService.delete(id);
+        return ResponseEntity.noContent().build();
+    }
 }

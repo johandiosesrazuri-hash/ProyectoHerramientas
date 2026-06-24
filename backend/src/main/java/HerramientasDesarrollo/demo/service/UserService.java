@@ -61,4 +61,28 @@ public class UserService {
                 .createdAt(user.getCreatedAt())
                 .build();
     }
+
+    public UserResponse updateUser(Long id, CreateUserRequest request) {
+        Usuario user = usuarioRepository.findById(id)
+                .orElseThrow(() -> new HerramientasDesarrollo.demo.exception.ResourceNotFoundException("Usuario no encontrado"));
+        
+        if (!user.getEmail().equals(request.getEmail()) && usuarioRepository.existsByEmail(request.getEmail())) {
+            throw new EmailAlreadyExistsException("El email ya está registrado");
+        }
+
+        user.setNombre(request.getNombre());
+        user.setEmail(request.getEmail());
+        user.setRol(request.getRol());
+        if (request.getPassword() != null && !request.getPassword().isBlank()) {
+            user.setPassword(passwordEncoder.encode(request.getPassword()));
+        }
+        return toResponse(usuarioRepository.save(user));
+    }
+
+    public void deleteUser(Long id) {
+        if (!usuarioRepository.existsById(id)) {
+            throw new HerramientasDesarrollo.demo.exception.ResourceNotFoundException("Usuario no encontrado");
+        }
+        usuarioRepository.deleteById(id);
+    }
 }

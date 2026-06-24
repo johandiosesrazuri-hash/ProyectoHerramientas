@@ -27,4 +27,6 @@ public interface SlotRepository extends JpaRepository<Slot, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     Optional<Slot> findWithLockingById(Long id);
+
+    long countByEstado(SlotEstado estado);
 }

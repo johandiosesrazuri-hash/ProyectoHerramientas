@@ -30,11 +30,6 @@ const Sidebar = ({ onLogout, onNavigate }) => {
       icon: '📋'
     },
     {
-      id: 'especialidades',
-      label: 'Especialidades',
-      icon: '🏥'
-    },
-    {
       id: 'medicos',
       label: 'Médicos en General',
       icon: '👨‍⚕️'
@@ -45,6 +40,17 @@ const Sidebar = ({ onLogout, onNavigate }) => {
       icon: '❓'
     }
   ];
+
+  const adminOptions = [
+    { id: 'admin-dashboard', label: 'Dashboard Admin', icon: '📊' },
+    { id: 'admin-usuarios', label: 'Gestión Usuarios', icon: '👥' },
+    { id: 'admin-doctores', label: 'Gestión Médicos', icon: '🩺' },
+    { id: 'admin-citas', label: 'Monitor Citas', icon: '📅' },
+    { id: 'admin-especialidades', label: 'Especialidades', icon: '🏥' }
+  ];
+
+  const userRole = JSON.parse(localStorage.getItem('user') || '{}')?.rol;
+  const optionsToRender = userRole === 'ADMIN' ? [...adminOptions, ...menuOptions] : menuOptions;
 
   return (
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
@@ -60,7 +66,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
       </div>
 
       <nav className="sidebar-nav">
-        {menuOptions.map((option) => (
+        {optionsToRender.map((option) => (
           <button
             key={option.id}
             className={`menu-item ${activeOption === option.id ? 'active' : ''}`}

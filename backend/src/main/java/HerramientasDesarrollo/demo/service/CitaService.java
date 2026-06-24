@@ -1,9 +1,6 @@
 package HerramientasDesarrollo.demo.service;
 
-import org.springframework.security.core.Authentication;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
+import HerramientasDesarrollo.demo.dto.cita.CitaAdminResponse;
 import HerramientasDesarrollo.demo.dto.cita.CitaHistoryResponse;
 import HerramientasDesarrollo.demo.dto.cita.CitaResponse;
 import HerramientasDesarrollo.demo.dto.cita.CreateCitaRequest;
@@ -19,7 +16,11 @@ import HerramientasDesarrollo.demo.repository.DoctorRepository;
 import HerramientasDesarrollo.demo.repository.SlotRepository;
 import HerramientasDesarrollo.demo.repository.UsuarioRepository;
 import HerramientasDesarrollo.demo.security.UserPrincipal;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -76,10 +77,10 @@ public class CitaService {
      * Recupera el historial de citas visible para el usuario autenticado.
      * - ADMIN: todas las citas
      * - PACIENTE: sólo sus citas
-     * - MEDICO: requiere `doctorId` como parámetro para identificar su doctorId (si no se puede resolver automáticamente)
+     * - MEDICO: requiere doctorId como parámetro
      */
     @Transactional(readOnly = true)
-    public java.util.List<CitaHistoryResponse> getHistorial(Authentication authentication, Long doctorId, String search, String estado) {
+    public List<CitaHistoryResponse> getHistorial(Authentication authentication, Long doctorId, String search, String estado) {
         if (authentication == null || !(authentication.getPrincipal() instanceof UserPrincipal principal)) {
             throw new IllegalStateException("Usuario no autenticado");
         }
@@ -87,7 +88,7 @@ public class CitaService {
         var usuario = principal.getUsuario();
         var rol = usuario.getRol();
 
-        java.util.List<Cita> citas;
+        List<Cita> citas;
 
         switch (rol) {
             case ADMIN:
@@ -106,9 +107,8 @@ public class CitaService {
                 throw new IllegalStateException("Rol no soportado para historial");
         }
 
-        // filtros simples: estado y búsqueda por doctor/paciente/especialidad
         final String searchLower = (search == null) ? null : search.trim().toLowerCase();
-        final HerramientasDesarrollo.demo.entity.CitaEstado estadoEnum = (estado == null || estado.isBlank()) ? null : HerramientasDesarrollo.demo.entity.CitaEstado.valueOf(estado);
+        final CitaEstado estadoEnum = (estado == null || estado.isBlank()) ? null : CitaEstado.valueOf(estado);
 
         return citas.stream()
                 .filter(c -> {
@@ -138,6 +138,49 @@ public class CitaService {
                             .build();
                 })
                 .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<CitaAdminResponse> findAll() {
+        return citaRepository.findAllWithDetails().stream()
+                .map(this::toAdminResponse)
+                .toList();
+    }
+
+    @Transactional
+    public CitaAdminResponse updateEstado(Long id, CitaEstado nuevoEstado) {
+        Cita cita = citaRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Cita no encontrada"));
+
+        cita.setEstado(nuevoEstado);
+
+        // Si se cancela la cita, liberar el slot para que otro paciente lo reserve.
+        if (nuevoEstado == CitaEstado.CANCELADA) {
+            Slot slot = cita.getSlot();
+            slot.setEstado(SlotEstado.DISPONIBLE);
+            slotRepository.save(slot);
+        }
+
+        Cita saved = citaRepository.save(cita);
+        return toAdminResponse(saved);
+    }
+
+    private CitaAdminResponse toAdminResponse(Cita cita) {
+        return CitaAdminResponse.builder()
+                .id(cita.getId())
+                .slotId(cita.getSlot().getId())
+                .doctorId(cita.getSlot().getDoctor().getId())
+                .doctorNombre(cita.getSlot().getDoctor().getNombre() + " " + cita.getSlot().getDoctor().getApellido())
+                .usuarioId(cita.getUsuario().getId())
+                .pacienteNombre(cita.getUsuario().getNombre())
+                .pacienteEmail(cita.getUsuario().getEmail())
+                .fecha(cita.getSlot().getFecha())
+                .horaInicio(cita.getSlot().getHoraInicio())
+                .horaFin(cita.getSlot().getHoraFin())
+                .estado(cita.getEstado())
+                .motivo(cita.getMotivo())
+                .createdAt(cita.getCreatedAt())
+                .build();
     }
 
     private Long getAuthenticatedUserId(Authentication authentication) {
