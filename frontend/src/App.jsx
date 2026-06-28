@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import Login from './componentes/Login'
 import Registro from './componentes/Registro'
 import Dashboard from './componentes/Dashboard'
+import { ToastProvider } from './componentes/Toast'
 import './App.css'
 
 function App() {
@@ -30,25 +31,30 @@ function App() {
   };
 
   if (isAuthenticated) {
-    return <Dashboard onLogout={handleLogout} />;
+    return (
+      <ToastProvider>
+        <Dashboard onLogout={handleLogout} />
+      </ToastProvider>
+    );
   }
 
   return (
-    <div className="app-container">
-      {!isLogin ? (
-        <Registro
-          onAuthSuccess={handleAuthSuccess}
-          onSwitchToLogin={() => setIsLogin(true)}
-        />
-      ) : (
-        <Login
-          onAuthSuccess={handleAuthSuccess}
-          onSwitchToRegister={() => setIsLogin(false)}
-        />
-      )}
-    </div>
+    <ToastProvider>
+      <div className="app-container">
+        {!isLogin ? (
+          <Registro
+            onAuthSuccess={handleAuthSuccess}
+            onSwitchToLogin={() => setIsLogin(true)}
+          />
+        ) : (
+          <Login
+            onAuthSuccess={handleAuthSuccess}
+            onSwitchToRegister={() => setIsLogin(false)}
+          />
+        )}
+      </div>
+    </ToastProvider>
   )
 }
-
 
 export default App

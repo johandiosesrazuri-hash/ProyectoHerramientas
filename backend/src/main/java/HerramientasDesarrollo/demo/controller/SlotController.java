@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class SlotController {
 
     private final SlotService slotService;
+    private final HerramientasDesarrollo.demo.repository.SlotRepository slotRepository;
 
     /**
         * Materializa agenda en bloques de 30 minutos dentro de un rango de fechas,
@@ -44,5 +45,29 @@ public class SlotController {
     })
     public ResponseEntity<GenerateSlotsResponse> generarSlots(@Valid @RequestBody GenerateSlotsRequest request) {
         return ResponseEntity.ok(slotService.generarSlots(request));
+    }
+
+    @org.springframework.web.bind.annotation.GetMapping
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Listar slots", description = "Lista slots (opcionalmente filtrados por doctor y fecha)")
+    public ResponseEntity<java.util.List<HerramientasDesarrollo.demo.dto.slot.DoctorSlotResponse>> getSlots(
+            @org.springframework.web.bind.annotation.RequestParam(required = false) Long doctorId,
+            @org.springframework.web.bind.annotation.RequestParam(required = false) @org.springframework.format.annotation.DateTimeFormat(iso = org.springframework.format.annotation.DateTimeFormat.ISO.DATE) java.time.LocalDate fecha
+    ) {
+        java.util.List<HerramientasDesarrollo.demo.entity.Slot> slots;
+        if (doctorId != null && fecha != null) {
+            slots = slotRepository.findByDoctorIdAndFechaOrderByHoraInicioAsc(doctorId, fecha);
+        } else {
+            slots = slotRepository.findAll();
+        }
+        java.util.List<HerramientasDesarrollo.demo.dto.slot.DoctorSlotResponse> response = slots.stream()
+                .map(slot -> HerramientasDesarrollo.demo.dto.slot.DoctorSlotResponse.builder()
+                        .id(slot.getId())
+                        .horaInicio(slot.getHoraInicio())
+                        .horaFin(slot.getHoraFin())
+                        .estado(slot.getEstado())
+                        .build())
+                .toList();
+        return ResponseEntity.ok(response);
     }
 }

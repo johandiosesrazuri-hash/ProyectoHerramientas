@@ -1,12 +1,14 @@
 package HerramientasDesarrollo.demo.service;
 
 import HerramientasDesarrollo.demo.dto.horario.CreateHorarioRequest;
+import HerramientasDesarrollo.demo.dto.horario.HorarioResponse;
 import HerramientasDesarrollo.demo.entity.Doctor;
 import HerramientasDesarrollo.demo.entity.HorarioBase;
 import HerramientasDesarrollo.demo.exception.ResourceNotFoundException;
 import HerramientasDesarrollo.demo.exception.ScheduleOverlapException;
 import HerramientasDesarrollo.demo.repository.DoctorRepository;
 import HerramientasDesarrollo.demo.repository.HorarioBaseRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,5 +51,39 @@ public class HorarioService {
         horarioBase.setHoraFin(request.getHoraFin());
 
         return horarioBaseRepository.save(horarioBase);
+    }
+
+    @Transactional(readOnly = true)
+    public List<HorarioResponse> findByDoctorId(Long doctorId) {
+        return horarioBaseRepository.findByDoctorId(doctorId).stream()
+                .map(h -> HorarioResponse.builder()
+                        .id(h.getId())
+                        .doctorId(h.getDoctor().getId())
+                        .diaSemana(h.getDiaSemana())
+                        .horaInicio(h.getHoraInicio())
+                        .horaFin(h.getHoraFin())
+                        .build())
+                .toList();
+    }
+
+    @Transactional(readOnly = true)
+    public List<HorarioResponse> findAll() {
+        return horarioBaseRepository.findAll().stream()
+                .map(h -> HorarioResponse.builder()
+                        .id(h.getId())
+                        .doctorId(h.getDoctor().getId())
+                        .diaSemana(h.getDiaSemana())
+                        .horaInicio(h.getHoraInicio())
+                        .horaFin(h.getHoraFin())
+                        .build())
+                .toList();
+    }
+
+    @Transactional
+    public void delete(Long id) {
+        if (!horarioBaseRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Horario no encontrado");
+        }
+        horarioBaseRepository.deleteById(id);
     }
 }

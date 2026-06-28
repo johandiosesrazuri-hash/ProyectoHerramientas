@@ -23,15 +23,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @Tag(name = "Auth", description = "Autenticación y registro de usuarios")
 /**
- * Controlador responsable del ciclo de vida de autenticación (alta e inicio de sesión).
+ * Controlador responsable del ciclo de vida de autenticación (alta e inicio de
+ * sesión).
  */
 public class AuthController {
 
     private final AuthService authService;
 
     /**
-        * Registra usuarios nuevos. Si la solicitud intenta crear roles elevados,
-        * exige que quien invoca ya tenga privilegios de administrador.
+     * Registra usuarios nuevos. Si la solicitud intenta crear roles elevados,
+     * exige que quien invoca ya tenga privilegios de administrador.
      */
     @PostMapping("/register")
     @Operation(summary = "Registrar usuario", description = "Registra usuario; por defecto PACIENTE. ADMIN puede crear ADMIN/MEDICO")
@@ -43,13 +44,12 @@ public class AuthController {
     })
     public ResponseEntity<AuthResponse> register(
             @Valid @RequestBody RegisterRequest request,
-            Authentication authentication
-    ) {
+            Authentication authentication) {
         return ResponseEntity.status(HttpStatus.CREATED).body(authService.register(request, authentication));
     }
 
     /**
-        * Autentica credenciales y devuelve un JWT con claims de identidad y rol.
+     * Autentica credenciales y devuelve un JWT con claims de identidad y rol.
      */
     @PostMapping("/login")
     @Operation(summary = "Login", description = "Valida credenciales y retorna token JWT")

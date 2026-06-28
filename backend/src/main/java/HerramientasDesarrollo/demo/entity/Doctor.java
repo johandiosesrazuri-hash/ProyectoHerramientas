@@ -19,9 +19,7 @@ import lombok.Setter;
 @Table(name = "Doctor")
 @Getter
 @Setter
-/**
- * Representa un profesional de salud disponible para agendamiento.
- */
+
 public class Doctor {
 
     @Id
