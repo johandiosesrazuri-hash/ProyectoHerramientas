@@ -6,6 +6,13 @@ import Sidebar from './Sidebar';
 import logoSkipline from '../assets/images/logo.png';
 import '../styles/Dashboard.css';
 
+import AdminDashboard from './admin/AdminDashboard';
+import AdminUsuarios from './admin/AdminUsuarios';
+import AdminDoctores from './admin/AdminDoctores';
+import AdminCitas from './admin/AdminCitas';
+import AdminEspecialidades from './admin/AdminEspecialidades';
+import AdminHorarios from './admin/AdminHorarios';
+
 const Dashboard = (props) => {
   const [doctores, setDoctores] = useState([]);
   const [search, setSearch] = useState('');
@@ -15,10 +22,41 @@ const Dashboard = (props) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedDoctor, setSelectedDoctor] = useState(null);
   const [currentView, setCurrentView] = useState('medicos');
+  const [ayudaNombre, setAyudaNombre] = useState('');
+  const [ayudaEmail, setAyudaEmail] = useState('');
+  const [ayudaTipo, setAyudaTipo] = useState('cita');
+  const [ayudaMensaje, setAyudaMensaje] = useState('');
+  const [ayudaSuccess, setAyudaSuccess] = useState('');
+  const [ayudaError, setAyudaError] = useState('');
+
+  const [especialidadesList, setEspecialidadesList] = useState(['Todas']);
 
   useEffect(() => {
     loadDoctores();
   }, [search, especialidad]);
+
+  useEffect(() => {
+    loadEspecialidades();
+  }, []);
+
+  const loadEspecialidades = async () => {
+    try {
+      const token = localStorage.getItem('authToken');
+      const res = await fetch('http://localhost:8080/api/especialidades', {
+        headers: {
+          'Content-Type': 'application/json',
+          ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        const names = data.map(item => item.nombre);
+        setEspecialidadesList(['Todas', ...names]);
+      }
+    } catch (err) {
+      console.error('Error al cargar especialidades:', err);
+    }
+  };
 
   const loadDoctores = async () => {
     try {
@@ -36,14 +74,6 @@ const Dashboard = (props) => {
       setLoading(false);
     }
   };
-
-  const especialidades = useMemo(() => {
-    const values = doctores
-      .flatMap((doctor) => (doctor.especialidad || '').split(','))
-      .map((item) => item.trim())
-      .filter(Boolean);
-    return ['Todas', ...new Set(values)];
-  }, [doctores]);
 
   const doctoresDisponibles = useMemo(
     () => doctores.filter((doctor) => doctor.estado === 'DISPONIBLE').length,
@@ -78,6 +108,23 @@ const Dashboard = (props) => {
     setCurrentView(view);
   };
 
+  const handleAyudaSubmit = (event) => {
+    event.preventDefault();
+    setAyudaSuccess('');
+    setAyudaError('');
+
+    if (!ayudaNombre.trim() || !ayudaEmail.trim() || !ayudaMensaje.trim()) {
+      setAyudaError('Completa todos los campos para enviar tu solicitud de soporte.');
+      return;
+    }
+
+    setAyudaSuccess('Tu mensaje ha sido enviado. Nuestro equipo de soporte te responderá a la brevedad.');
+    setAyudaNombre('');
+    setAyudaEmail('');
+    setAyudaTipo('cita');
+    setAyudaMensaje('');
+  };
+
   const renderMedicosView = () => (
     <>
       <section className="stats-grid">
@@ -87,7 +134,7 @@ const Dashboard = (props) => {
         </article>
         <article className="stat-card">
           <p className="stat-label">Especialidades</p>
-          <p className="stat-value">{Math.max(especialidades.length - 1, 0)}</p>
+          <p className="stat-value">{Math.max(especialidadesList.length - 1, 0)}</p>
         </article>
         <article className="stat-card">
           <p className="stat-label">Total de Doctores</p>
@@ -114,7 +161,7 @@ const Dashboard = (props) => {
             value={especialidad}
             onChange={(e) => setEspecialidad(e.target.value)}
           >
-            {especialidades.map((item) => (
+            {especialidadesList.map((item) => (
               <option key={item} value={item}>
                 {item}
               </option>
@@ -174,6 +221,19 @@ const Dashboard = (props) => {
 
   const renderContent = () => {
     switch (currentView) {
+      case 'admin-dashboard':
+        return <AdminDashboard />;
+      case 'admin-usuarios':
+        return <AdminUsuarios />;
+      case 'admin-doctores':
+        return <AdminDoctores onNavigate={handleNavigate} />;
+      case 'admin-horarios':
+        return <AdminHorarios />;
+      case 'admin-citas':
+        return <AdminCitas />;
+      case 'admin-especialidades':
+        return <AdminEspecialidades />;
+        
       case 'perfil':
         return (
           <section className="content-section">
@@ -194,22 +254,115 @@ const Dashboard = (props) => {
           </section>
         );
 
-      case 'especialidades':
-        return (
-          <section className="content-section">
-            <h2>Especialidades</h2>
-            <div className="specialties-card">
-              <p className="placeholder-text">Catálogo de especialidades disponibles</p>
-            </div>
-          </section>
-        );
-
       case 'ayuda':
         return (
           <section className="content-section">
             <h2>Centro de Ayuda</h2>
             <div className="help-card">
-              <p className="placeholder-text">Centro de ayuda y soporte técnico</p>
+              <div className="help-card-content">
+                <div className="help-grid">
+                  <div className="help-column">
+                    <div className="help-section">
+                      <h3>¿Cómo podemos ayudarte?</h3>
+                      <p className="help-intro">
+                        Encuentra respuestas rápidas sobre citas, pagos, horarios, cambios de turno o accesos.
+                        Si no logras resolver tu duda, envíanos un mensaje y nuestro equipo de soporte te atenderá.
+                      </p>
+                    </div>
+
+                    <div className="help-section">
+                      <h4>Temas frecuentes</h4>
+                      <ul className="help-list">
+                        <li>Confirmación y reprogramación de citas</li>
+                        <li>Consultas sobre disponibilidad de doctores</li>
+                        <li>Problemas de acceso a la plataforma</li>
+                        <li>Soporte para cambios de horario o cancelaciones</li>
+                      </ul>
+                    </div>
+
+                    <div className="help-section">
+                      <h4>Canales de atención</h4>
+                      <div className="help-info-grid">
+                        <div className="help-info-card">
+                          <strong>Teléfono</strong>
+                          <span>+52 55 1234 5678</span>
+                        </div>
+                        <div className="help-info-card">
+                          <strong>Correo</strong>
+                          <span>soporte@skipline.mx</span>
+                        </div>
+                        <div className="help-info-card">
+                          <strong>Horario</strong>
+                          <span>Lun a Vie · 09:00 - 18:00</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <aside className="help-form-card">
+                    <h3>¿No encontraste solución?</h3>
+                    <p className="help-form-description">
+                      Completa este formulario y nuestro equipo responderá lo antes posible.
+                    </p>
+
+                    {ayudaSuccess && <p className="panel-state panel-success">{ayudaSuccess}</p>}
+                    {ayudaError && <p className="panel-state panel-error">{ayudaError}</p>}
+
+                    <form className="help-form" onSubmit={handleAyudaSubmit}>
+                      <div className="help-input-group">
+                        <label htmlFor="helpNombre">Nombre</label>
+                        <input
+                          id="helpNombre"
+                          type="text"
+                          placeholder="Tu nombre completo"
+                          value={ayudaNombre}
+                          onChange={(event) => setAyudaNombre(event.target.value)}
+                        />
+                      </div>
+
+                      <div className="help-input-group">
+                        <label htmlFor="helpEmail">Correo electrónico</label>
+                        <input
+                          id="helpEmail"
+                          type="email"
+                          placeholder="tu@correo.com"
+                          value={ayudaEmail}
+                          onChange={(event) => setAyudaEmail(event.target.value)}
+                        />
+                      </div>
+
+                      <div className="help-input-group">
+                        <label htmlFor="helpTipo">Tipo de consulta</label>
+                        <select
+                          id="helpTipo"
+                          value={ayudaTipo}
+                          onChange={(event) => setAyudaTipo(event.target.value)}
+                        >
+                          <option value="cita">Cita o reprogramación</option>
+                          <option value="acceso">Acceso a la plataforma</option>
+                          <option value="pago">Pago o factura</option>
+                          <option value="otro">Otro</option>
+                        </select>
+                      </div>
+
+                      <div className="help-input-group">
+                        <label htmlFor="helpMensaje">Mensaje</label>
+                        <textarea
+                          id="helpMensaje"
+                          rows="5"
+                          placeholder="Describe tu problema o pregunta..."
+                          value={ayudaMensaje}
+                          onChange={(event) => setAyudaMensaje(event.target.value)}
+                        />
+                      </div>
+
+                      <button type="submit" className="primary-button">
+                        Enviar solicitud
+                      </button>
+                    </form>
+                  </aside>
+                </div>
+              </div>
             </div>
           </section>
         );

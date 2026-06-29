@@ -11,10 +11,12 @@ import {
   faChevronRight
 } from '@fortawesome/pro-solid-svg-icons';
 import '../styles/Sidebar.css';
+import '../styles/AppointmentModal.css';
 
 const Sidebar = ({ onLogout, onNavigate }) => {
   const [isOpen, setIsOpen] = useState(true);
   const [activeOption, setActiveOption] = useState('medicos');
+  const [isLogoutModalOpen, setIsLogoutModalOpen] = useState(false);
 
   const handleOptionClick = (option) => {
     setActiveOption(option);
@@ -23,10 +25,8 @@ const Sidebar = ({ onLogout, onNavigate }) => {
     }
   };
 
-  const handleLogout = () => {
-    if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-      onLogout();
-    }
+  const handleLogoutClick = () => {
+    setIsLogoutModalOpen(true);
   };
 
   const menuOptions = [
@@ -57,6 +57,18 @@ const Sidebar = ({ onLogout, onNavigate }) => {
     }
   ];
 
+  const adminOptions = [
+    { id: 'admin-dashboard', label: 'Dashboard Admin', icon: '📊' },
+    { id: 'admin-usuarios', label: 'Gestión Usuarios', icon: '👥' },
+    { id: 'admin-doctores', label: 'Gestión Médicos', icon: '🩺' },
+    { id: 'admin-horarios', label: 'Gestión Horarios', icon: '🕒' },
+    { id: 'admin-citas', label: 'Monitor Citas', icon: '📅' },
+    { id: 'admin-especialidades', label: 'Especialidades', icon: '🏥' }
+  ];
+
+  const userRole = JSON.parse(localStorage.getItem('user') || '{}')?.rol;
+  const optionsToRender = userRole === 'ADMIN' ? [...adminOptions, ...menuOptions] : menuOptions;
+
   return (
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-header">
@@ -66,7 +78,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
           onClick={() => setIsOpen(!isOpen)}
           aria-label="Toggle sidebar"
         >
-          <FontAwesomeIcon icon={isOpen ? faChevronLeft : faChevronRight} />
+          {isOpen ? '◀' : '▶'}
         </button>
       </div>
 
@@ -78,9 +90,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
             onClick={() => handleOptionClick(option.id)}
             title={option.label}
           >
-            <span className="menu-icon">
-              <FontAwesomeIcon icon={option.icon} />
-            </span>
+            <span className="menu-icon">{option.icon}</span>
             <span className={`menu-label ${!isOpen && 'hidden'}`}>
               {option.label}
             </span>
@@ -94,9 +104,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
           onClick={handleLogout}
           title="Cerrar sesión"
         >
-          <span className="menu-icon">
-            <FontAwesomeIcon icon={faRightFromBracket} />
-          </span>
+          <span className="menu-icon">🚪</span>
           <span className={`menu-label ${!isOpen && 'hidden'}`}>
             Cerrar Sesión
           </span>

@@ -1,16 +1,21 @@
 package HerramientasDesarrollo.demo.service;
 
+import HerramientasDesarrollo.demo.dto.doctor.CreateDoctorRequest;
 import HerramientasDesarrollo.demo.dto.doctor.DoctorListResponse;
 import HerramientasDesarrollo.demo.dto.slot.DoctorSlotResponse;
 import HerramientasDesarrollo.demo.entity.Doctor;
 import HerramientasDesarrollo.demo.entity.Especialidad;
 import HerramientasDesarrollo.demo.entity.Slot;
 import HerramientasDesarrollo.demo.entity.SlotEstado;
+import HerramientasDesarrollo.demo.exception.ResourceNotFoundException;
 import HerramientasDesarrollo.demo.repository.DoctorRepository;
+import HerramientasDesarrollo.demo.repository.EspecialidadRepository;
 import HerramientasDesarrollo.demo.repository.SlotRepository;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,6 +30,7 @@ public class DoctorService {
 
     private final DoctorRepository doctorRepository;
     private final SlotRepository slotRepository;
+    private final EspecialidadRepository especialidadRepository;
 
     @Transactional(readOnly = true)
     public List<DoctorListResponse> listDoctors(String search, String especialidad) {
@@ -46,6 +52,56 @@ public class DoctorService {
                         .estado(slot.getEstado())
                         .build())
                 .toList();
+    }
+
+    @Transactional
+    public DoctorListResponse createDoctor(CreateDoctorRequest request) {
+        Doctor doctor = new Doctor();
+        doctor.setNombre(request.getNombre());
+        doctor.setApellido(request.getApellido());
+        doctor.setExperienciaAnios(request.getExperienciaAnios());
+        doctor.setConsultorio(request.getConsultorio());
+        doctor.setFotoUrl(request.getFotoUrl());
+        doctor.setClinicaId(request.getClinicaId());
+
+        if (request.getEspecialidadIds() != null && !request.getEspecialidadIds().isEmpty()) {
+            Set<Especialidad> especialidades = new HashSet<>(
+                    especialidadRepository.findAllById(request.getEspecialidadIds()));
+            doctor.setEspecialidades(especialidades);
+        }
+
+        Doctor saved = doctorRepository.save(doctor);
+        return toDoctorListResponse(saved);
+    }
+
+    @Transactional
+    public DoctorListResponse updateDoctor(Long id, CreateDoctorRequest request) {
+        Doctor doctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Doctor no encontrado"));
+
+        doctor.setNombre(request.getNombre());
+        doctor.setApellido(request.getApellido());
+        doctor.setExperienciaAnios(request.getExperienciaAnios());
+        doctor.setConsultorio(request.getConsultorio());
+        doctor.setFotoUrl(request.getFotoUrl());
+        doctor.setClinicaId(request.getClinicaId());
+
+        if (request.getEspecialidadIds() != null) {
+            Set<Especialidad> especialidades = new HashSet<>(
+                    especialidadRepository.findAllById(request.getEspecialidadIds()));
+            doctor.setEspecialidades(especialidades);
+        }
+
+        Doctor saved = doctorRepository.save(doctor);
+        return toDoctorListResponse(saved);
+    }
+
+    @Transactional
+    public void deleteDoctor(Long id) {
+        if (!doctorRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Doctor no encontrado");
+        }
+        doctorRepository.deleteById(id);
     }
 
     private DoctorListResponse toDoctorListResponse(Doctor doctor) {

@@ -75,4 +75,22 @@ public class UserController {
     public ResponseEntity<UserResponse> me(Authentication authentication) {
         return ResponseEntity.ok(userService.getCurrentUser(authentication));
     }
+
+    @org.springframework.web.bind.annotation.PutMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Actualizar usuario", description = "Actualiza datos de un usuario (solo ADMIN)")
+    public ResponseEntity<UserResponse> updateUser(
+            @org.springframework.web.bind.annotation.PathVariable Long id,
+            @Valid @RequestBody CreateUserRequest request
+    ) {
+        return ResponseEntity.ok(userService.updateUser(id, request));
+    }
+
+    @org.springframework.web.bind.annotation.DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @Operation(summary = "Eliminar usuario", description = "Elimina un usuario (solo ADMIN)")
+    public ResponseEntity<Void> deleteUser(@org.springframework.web.bind.annotation.PathVariable Long id) {
+        userService.deleteUser(id);
+        return ResponseEntity.noContent().build();
+    }
 }
