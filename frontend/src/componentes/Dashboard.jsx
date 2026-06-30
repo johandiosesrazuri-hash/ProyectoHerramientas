@@ -271,7 +271,7 @@ const Dashboard = (props) => {
                     </div>
 
                     <div className="help-section">
-                      <h4>Temas frecuentes</h4>
+                      <h4><strong>Temas frecuentes</strong></h4>
                       <ul className="help-list">
                         <li>Confirmación y reprogramación de citas</li>
                         <li>Consultas sobre disponibilidad de doctores</li>
@@ -281,11 +281,35 @@ const Dashboard = (props) => {
                     </div>
 
                     <div className="help-section">
+                      <h4>Ubicación</h4>
+                      <p className="help-intro">
+                        Puedes encontrarnos en la Universidad Tecnológica del Perú para atención presencial o consultas rápidas.
+                      </p>
+                      <a
+                        className="help-location-link"
+                        href="https://maps.google.com/?q=Universidad+Tecnol%C3%B3gica+del+Per%C3%BA"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        Ver en Google Maps
+                      </a>
+                      <div className="help-map-wrapper">
+                        <iframe
+                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3973.508630346021!2d-80.6428643899005!3d-5.182412494773362!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x904a1bdf91d8b825%3A0xa4bfa3480b1255ea!2sUniversidad%20Tecnol%C3%B3gica%20Del%20Per%C3%BA!5e0!3m2!1ses!2spe!4v1782584006501!5m2!1ses!2spe"
+                          title="Ubicación de soporte"
+                          loading="lazy"
+                          referrerPolicy="strict-origin-when-cross-origin"
+                          allowFullScreen
+                        />
+                      </div>
+                    </div>
+
+                    <div className="help-section">
                       <h4>Canales de atención</h4>
                       <div className="help-info-grid">
                         <div className="help-info-card">
                           <strong>Teléfono</strong>
-                          <span>+52 55 1234 5678</span>
+                          <span>+51 978 704 402</span>
                         </div>
                         <div className="help-info-card">
                           <strong>Correo</strong>
@@ -293,10 +317,12 @@ const Dashboard = (props) => {
                         </div>
                         <div className="help-info-card">
                           <strong>Horario</strong>
-                          <span>Lun a Vie · 09:00 - 18:00</span>
+                          <span>Lunes a Viernes · 08:00 AM - 7:00 PM</span>
                         </div>
                       </div>
                     </div>
+
+                    
                   </div>
 
                   <aside className="help-form-card">
@@ -341,6 +367,7 @@ const Dashboard = (props) => {
                           <option value="cita">Cita o reprogramación</option>
                           <option value="acceso">Acceso a la plataforma</option>
                           <option value="pago">Pago o factura</option>
+                          <option value="pago">Tiempo de espera o disponibilidad</option>
                           <option value="otro">Otro</option>
                         </select>
                       </div>

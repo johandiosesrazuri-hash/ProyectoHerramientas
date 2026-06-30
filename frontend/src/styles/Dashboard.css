@@ -455,6 +455,35 @@
   color: #334155;
 }
 
+.help-location-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  color: var(--color-primary);
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.help-location-link:hover {
+  text-decoration: underline;
+}
+
+.help-map-wrapper {
+  margin-top: 14px;
+  border-radius: 14px;
+  overflow: hidden;
+  border: 1px solid rgba(42, 125, 225, 0.12);
+  box-shadow: 0 10px 24px rgba(42, 125, 225, 0.08);
+}
+
+.help-map-wrapper iframe {
+  width: 100%;
+  min-height: 240px;
+  border: 0;
+  display: block;
+}
+
 .help-form-card {
   background: linear-gradient(135deg, rgba(255, 255, 255, 0.96) 0%, rgba(242, 247, 255, 1) 100%);
   border-radius: 20px;
