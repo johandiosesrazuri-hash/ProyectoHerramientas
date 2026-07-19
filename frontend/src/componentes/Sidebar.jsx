@@ -74,8 +74,18 @@ const Sidebar = ({ onLogout, onNavigate }) => {
     { id: 'admin-especialidades', label: 'Especialidades', icon: faHospitalUser }
   ];
 
+  const medicoOptions = [
+    { id: 'perfil', label: 'Mi Perfil', icon: faUser },
+    { id: 'doctor-citas', label: 'Monitor de Citas', icon: faClipboardList }
+  ];
+
   const userRole = JSON.parse(localStorage.getItem('user') || '{}')?.rol;
-  const optionsToRender = userRole === 'ADMIN' ? [...adminOptions, ...menuOptions] : menuOptions;
+  let optionsToRender = menuOptions;
+  if (userRole === 'ADMIN') {
+    optionsToRender = [...adminOptions, ...menuOptions];
+  } else if (userRole === 'MEDICO') {
+    optionsToRender = medicoOptions;
+  }
 
   return (
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>

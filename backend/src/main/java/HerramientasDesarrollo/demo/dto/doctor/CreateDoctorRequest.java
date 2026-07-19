@@ -22,6 +22,13 @@ public class CreateDoctorRequest {
     @Size(max = 100, message = "El apellido no puede superar 100 caracteres")
     private String apellido;
 
+    @NotBlank(message = "El email es obligatorio")
+    @jakarta.validation.constraints.Email(message = "Debe ser un email válido")
+    private String email;
+
+    @NotBlank(message = "La contraseña es obligatoria")
+    private String password;
+
     private Integer experienciaAnios;
 
     @Size(max = 50, message = "El consultorio no puede superar 50 caracteres")

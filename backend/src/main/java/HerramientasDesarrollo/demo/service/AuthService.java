@@ -27,6 +27,7 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final UsuarioRepository usuarioRepository;
+    private final HerramientasDesarrollo.demo.repository.PacienteRepository pacienteRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
@@ -56,6 +57,10 @@ public class AuthService {
                 .build();
 
         Usuario saved = usuarioRepository.save(user);
+        if (saved.getRol() == Role.PACIENTE) {
+            pacienteRepository.save(HerramientasDesarrollo.demo.entity.Paciente.builder().usuario(saved).build());
+        }
+        
         UserPrincipal principal = new UserPrincipal(saved);
         String token = jwtService.generateToken(principal);
         UserResponse userResponse = userService.toResponse(saved);

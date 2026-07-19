@@ -18,4 +18,6 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
             @Param("search") String search,
             @Param("especialidad") String especialidad
     );
+
+    java.util.Optional<Doctor> findByUsuarioId(Long usuarioId);
 }
