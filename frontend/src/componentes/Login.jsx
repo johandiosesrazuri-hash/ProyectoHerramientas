@@ -112,12 +112,12 @@ const Login = (props) => {
         <section className="auth-form-panel">
           <form onSubmit={handleLoginSubmit} className="auth-form">
             <img src={logoSkipline} alt="Skipline Logo" className="form-logo" />
-            <h2>Iniciar sesión</h2>
+            <h2 className="animate-delay-1">Iniciar sesión</h2>
 
             {error && <div className="alert alert-error">{error}</div>}
             {success && <div className="alert alert-success">{success}</div>}
 
-            <div className="form-group">
+            <div className="form-group animate-delay-2">
               <label htmlFor="login-email">Email</label>
               <input
                 type="email"
@@ -131,7 +131,7 @@ const Login = (props) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group animate-delay-3">
               <label htmlFor="login-password">Contraseña</label>
               <input
                 type="password"
@@ -147,13 +147,13 @@ const Login = (props) => {
 
             <button
               type="submit"
-              className="btn btn-primary btn-block"
+              className="btn btn-primary btn-block animate-delay-4"
               disabled={loading}
             >
               {loading ? 'Iniciando sesión...' : 'Iniciar sesión'}
             </button>
 
-            <p className="auth-switch-text">
+            <p className="auth-switch-text animate-delay-5">
               ¿No tienes cuenta?{' '}
               <button
                 type="button"

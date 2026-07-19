@@ -72,6 +72,16 @@ public class DoctorController {
         return ResponseEntity.ok(doctorService.getDoctorSlotsByDate(doctorId, date));
     }
 
+    @GetMapping("/{doctorId}/disponibilidad")
+    @Operation(summary = "Obtener fechas con slots disponibles", description = "Retorna una lista de fechas en las que el doctor tiene slots disponibles")
+    public ResponseEntity<List<LocalDate>> getDoctorAvailableDates(
+            @PathVariable Long doctorId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde
+    ) {
+        LocalDate fechaInicio = (desde != null) ? desde : LocalDate.now();
+        return ResponseEntity.ok(doctorService.getDoctorAvailableDates(doctorId, fechaInicio));
+    }
+
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
     @Operation(summary = "Crear doctor", description = "Crea un doctor con especialidades (solo ADMIN)")
