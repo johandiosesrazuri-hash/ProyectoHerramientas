@@ -32,9 +32,16 @@ const Sidebar = ({ onLogout, onNavigate }) => {
   };
 
   const handleLogout = () => {
-    if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
-      onLogout();
-    }
+    setIsLogoutModalOpen(true);
+  };
+
+  const confirmLogout = () => {
+    setIsLogoutModalOpen(false);
+    onLogout();
+  };
+
+  const cancelLogout = () => {
+    setIsLogoutModalOpen(false);
   };
 
   const menuOptions = [
@@ -88,6 +95,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
   }
 
   return (
+    <>
     <aside className={`sidebar ${isOpen ? 'open' : 'closed'}`}>
       <div className="sidebar-header">
         <h2 className={`sidebar-title ${!isOpen && 'hidden'}`}>Menú</h2>
@@ -131,6 +139,29 @@ const Sidebar = ({ onLogout, onNavigate }) => {
         </button>
       </div>
     </aside>
+      
+      {/* Logout Confirmation Modal */}
+      {isLogoutModalOpen && (
+        <div className="appointment-modal-overlay active" style={{ zIndex: 9999 }}>
+          <div className="appointment-modal" style={{ maxWidth: '400px', margin: '0 auto' }}>
+            <div className="modal-header" style={{ justifyContent: 'center' }}>
+              <h3 style={{ margin: 0, color: 'var(--danger)', fontSize: '20px' }}>Cerrar Sesión</h3>
+            </div>
+            <div className="modal-content" style={{ display: 'block', textAlign: 'center', padding: '30px 20px' }}>
+              <p style={{ fontSize: '16px', color: 'var(--neutral-700)', margin: 0 }}>¿Estás seguro de que deseas cerrar sesión?</p>
+            </div>
+            <div className="modal-footer" style={{ justifyContent: 'center', gap: '15px' }}>
+              <button className="btn btn-secondary" onClick={cancelLogout}>
+                Cancelar
+              </button>
+              <button className="btn btn-primary" onClick={confirmLogout} style={{ background: 'var(--danger)' }}>
+                Sí, salir
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
   );
 };
 
