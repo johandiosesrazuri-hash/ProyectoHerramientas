@@ -31,6 +31,8 @@ public class DoctorService {
     private final DoctorRepository doctorRepository;
     private final SlotRepository slotRepository;
     private final EspecialidadRepository especialidadRepository;
+    private final HerramientasDesarrollo.demo.repository.UsuarioRepository usuarioRepository;
+    private final org.springframework.security.crypto.password.PasswordEncoder passwordEncoder;
 
     @Transactional(readOnly = true)
     public List<DoctorListResponse> listDoctors(String search, String especialidad) {
@@ -56,6 +58,18 @@ public class DoctorService {
 
     @Transactional
     public DoctorListResponse createDoctor(CreateDoctorRequest request) {
+        if (usuarioRepository.existsByEmail(request.getEmail())) {
+            throw new HerramientasDesarrollo.demo.exception.EmailAlreadyExistsException("El email ya está registrado");
+        }
+
+        HerramientasDesarrollo.demo.entity.Usuario usuario = HerramientasDesarrollo.demo.entity.Usuario.builder()
+                .nombre(request.getNombre() + " " + request.getApellido())
+                .email(request.getEmail())
+                .password(passwordEncoder.encode(request.getPassword()))
+                .rol(HerramientasDesarrollo.demo.entity.Role.MEDICO)
+                .build();
+        usuario = usuarioRepository.save(usuario);
+
         Doctor doctor = new Doctor();
         doctor.setNombre(request.getNombre());
         doctor.setApellido(request.getApellido());
@@ -63,6 +77,7 @@ public class DoctorService {
         doctor.setConsultorio(request.getConsultorio());
         doctor.setFotoUrl(request.getFotoUrl());
         doctor.setClinicaId(request.getClinicaId());
+        doctor.setUsuario(usuario);
 
         if (request.getEspecialidadIds() != null && !request.getEspecialidadIds().isEmpty()) {
             Set<Especialidad> especialidades = new HashSet<>(

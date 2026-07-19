@@ -19,6 +19,8 @@ const AdminDoctores = ({ onNavigate }) => {
     experienciaAnios: '',
     consultorio: '',
     fotoUrl: '',
+    email: '',
+    password: '',
     clinicaId: 1,
     especialidadIds: []
   });
@@ -66,6 +68,8 @@ const AdminDoctores = ({ onNavigate }) => {
       experienciaAnios: '',
       consultorio: '',
       fotoUrl: '',
+      email: '',
+      password: '',
       clinicaId: 1,
       especialidadIds: []
     });
@@ -89,6 +93,8 @@ const AdminDoctores = ({ onNavigate }) => {
       experienciaAnios: doctor.experiencia || 0,
       consultorio: doctor.consultorio || '',
       fotoUrl: doctor.foto || '',
+      email: doctor.email || '',
+      password: '',
       clinicaId: 1,
       especialidadIds: matchedIds
     });
@@ -120,6 +126,8 @@ const AdminDoctores = ({ onNavigate }) => {
     const payload = {
       nombre: formData.nombre.trim(),
       apellido: formData.apellido.trim(),
+      email: formData.email.trim(),
+      password: formData.password,
       experienciaAnios: parseInt(formData.experienciaAnios) || 0,
       consultorio: formData.consultorio.trim(),
       fotoUrl: formData.fotoUrl.trim() || 'https://via.placeholder.com/150',
@@ -247,6 +255,37 @@ const AdminDoctores = ({ onNavigate }) => {
                     />
                   </div>
                 </div>
+
+                {!editingDoctor && (
+                  <div style={{ display: 'flex', gap: '16px' }}>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label className="form-label" htmlFor="emailDoc">Correo Electrónico (Usuario Médico)</label>
+                      <input
+                        id="emailDoc"
+                        type="email"
+                        className="form-textarea"
+                        style={{ minHeight: 'unset', padding: '10px', background: '#f9fafb' }}
+                        placeholder="Ej. carlos.mendoza@clinica.com"
+                        value={formData.email}
+                        onChange={e => setFormData({ ...formData, email: e.target.value })}
+                        required={!editingDoctor}
+                      />
+                    </div>
+                    <div className="form-group" style={{ flex: 1 }}>
+                      <label className="form-label" htmlFor="passwordDoc">Contraseña (Usuario Médico)</label>
+                      <input
+                        id="passwordDoc"
+                        type="password"
+                        className="form-textarea"
+                        style={{ minHeight: 'unset', padding: '10px', background: '#f9fafb' }}
+                        placeholder="Ej. secreta123"
+                        value={formData.password}
+                        onChange={e => setFormData({ ...formData, password: e.target.value })}
+                        required={!editingDoctor}
+                      />
+                    </div>
+                  </div>
+                )}
 
                 <div style={{ display: 'flex', gap: '16px' }}>
                   <div className="form-group" style={{ flex: 1 }}>

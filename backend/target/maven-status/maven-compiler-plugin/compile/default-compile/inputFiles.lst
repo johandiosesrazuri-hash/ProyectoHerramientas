@@ -5,8 +5,10 @@ C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\DoctorController.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\EspecialidadController.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\HorarioController.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\PerfilController.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\SlotController.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\controller\UserController.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\DbMigrationRunner.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\DemoApplication.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\admin\AdminStatsResponse.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\auth\AuthResponse.java
@@ -28,12 +30,15 @@ C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\slot\GenerateSlotsRequest.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\slot\GenerateSlotsResponse.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\CreateUserRequest.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\PerfilResponse.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\UpdatePerfilRequest.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\dto\user\UserResponse.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Cita.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\CitaEstado.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Doctor.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Especialidad.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\HorarioBase.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Paciente.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Role.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\Slot.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\entity\SlotEstado.java
@@ -48,6 +53,7 @@ C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\DoctorRepository.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\EspecialidadRepository.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\HorarioBaseRepository.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\PacienteRepository.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\SlotRepository.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\repository\UsuarioRepository.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\security\CustomUserDetailsService.java
@@ -60,5 +66,6 @@ C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\DoctorService.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\EspecialidadService.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\HorarioService.java
+C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\PerfilService.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\SlotService.java
 C:\Users\JOHAN\Downloads\ProyectoHeramientas-A\ProyectoHerramientas\backend\src\main\java\HerramientasDesarrollo\demo\service\UserService.java

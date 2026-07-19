@@ -51,4 +51,8 @@ public class Doctor {
             inverseJoinColumns = @JoinColumn(name = "especialidad_id")
     )
     private Set<Especialidad> especialidades = new HashSet<>();
+
+    @jakarta.persistence.OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "usuario_id", referencedColumnName = "id")
+    private Usuario usuario;
 }

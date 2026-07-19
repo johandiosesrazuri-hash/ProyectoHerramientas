@@ -98,10 +98,15 @@ public class CitaService {
                 citas = citaRepository.findByUsuarioIdWithDetails(usuario.getId());
                 break;
             case MEDICO:
-                if (doctorId == null) {
-                    throw new IllegalStateException("Medico: se requiere doctorId como query param para listar su historial");
+                Long docId = doctorId;
+                if (docId == null) {
+                    var doc = doctorRepository.findByUsuarioId(usuario.getId()).orElse(null);
+                    if (doc != null) docId = doc.getId();
                 }
-                citas = citaRepository.findByDoctorIdWithDetails(doctorId);
+                if (docId == null) {
+                    throw new IllegalStateException("Rol no soportado para historial");
+                }
+                citas = citaRepository.findByDoctorIdWithDetails(docId);
                 break;
             default:
                 throw new IllegalStateException("Rol no soportado para historial");
@@ -148,9 +153,23 @@ public class CitaService {
     }
 
     @Transactional
-    public CitaAdminResponse updateEstado(Long id, CitaEstado nuevoEstado) {
+    public CitaAdminResponse updateEstado(Long id, CitaEstado nuevoEstado, Authentication authentication) {
+        if (authentication == null || !(authentication.getPrincipal() instanceof UserPrincipal principal)) {
+            throw new IllegalStateException("Usuario no autenticado");
+        }
+        Usuario usuario = principal.getUsuario();
+
         Cita cita = citaRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Cita no encontrada"));
+
+        if (usuario.getRol() == HerramientasDesarrollo.demo.entity.Role.MEDICO) {
+            Long doctorId = doctorRepository.findByUsuarioId(usuario.getId())
+                    .map(HerramientasDesarrollo.demo.entity.Doctor::getId)
+                    .orElseThrow(() -> new IllegalStateException("No se encontró el doctor asociado al usuario médico"));
+            if (!cita.getSlot().getDoctor().getId().equals(doctorId)) {
+                throw new org.springframework.security.access.AccessDeniedException("No puedes modificar citas de otros doctores");
+            }
+        }
 
         cita.setEstado(nuevoEstado);
 

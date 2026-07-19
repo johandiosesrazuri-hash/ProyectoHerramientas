@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { doctorService } from '../services/doctorService';
 import AppointmentModal from './AppointmentModal';
 import HistorialCitas from './HistorialCitas';
+import Perfil from './Perfil';
 import Sidebar from './Sidebar';
 import logoSkipline from '../assets/images/logo.png';
 import '../styles/Dashboard.css';
@@ -12,6 +13,7 @@ import AdminDoctores from './admin/AdminDoctores';
 import AdminCitas from './admin/AdminCitas';
 import AdminEspecialidades from './admin/AdminEspecialidades';
 import AdminHorarios from './admin/AdminHorarios';
+import DoctorCitas from './medico/DoctorCitas';
 
 const Dashboard = (props) => {
   const [doctores, setDoctores] = useState([]);
@@ -227,16 +229,10 @@ const Dashboard = (props) => {
         return <AdminCitas />;
       case 'admin-especialidades':
         return <AdminEspecialidades />;
-        
+      case 'doctor-citas':
+        return <DoctorCitas />;
       case 'perfil':
-        return (
-          <section className="content-section">
-            <h2>Mi Perfil</h2>
-            <div className="profile-card">
-              <p className="placeholder-text">Tu información de perfil aparecerá aquí</p>
-            </div>
-          </section>
-        );
+        return <Perfil />;
 
       case 'historial':
         return (

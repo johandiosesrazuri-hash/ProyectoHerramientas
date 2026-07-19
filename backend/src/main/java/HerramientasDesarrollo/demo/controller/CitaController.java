@@ -84,12 +84,13 @@ public class CitaController {
     }
 
     @PutMapping("/{id}/estado")
-    @PreAuthorize("hasRole('ADMIN')")
-    @Operation(summary = "Cambiar estado de cita", description = "Actualiza el estado de una cita (solo ADMIN)")
+    @PreAuthorize("hasAnyRole('ADMIN', 'MEDICO')")
+    @Operation(summary = "Cambiar estado de cita", description = "Actualiza el estado de una cita (ADMIN o MEDICO)")
     public ResponseEntity<CitaAdminResponse> updateEstado(
             @PathVariable Long id,
-            @Valid @RequestBody UpdateCitaEstadoRequest request
+            @Valid @RequestBody UpdateCitaEstadoRequest request,
+            Authentication authentication
     ) {
-        return ResponseEntity.ok(citaService.updateEstado(id, request.getEstado()));
+        return ResponseEntity.ok(citaService.updateEstado(id, request.getEstado(), authentication));
     }
 }
