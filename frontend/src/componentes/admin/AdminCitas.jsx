@@ -38,7 +38,25 @@ const AdminCitas = () => {
     }
   };
 
-  if (loading) return <div className="admin-loading">Cargando citas...</div>;
+  const renderTableSkeletons = () => (
+    <>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <tr key={n}>
+          <td><div className="table-skeleton-bar id shimmer"></div></td>
+          <td><div className="table-skeleton-bar shimmer" style={{ width: '85%' }}></div></td>
+          <td><div className="table-skeleton-bar shimmer"></div></td>
+          <td><div className="table-skeleton-bar shimmer"></div></td>
+          <td><div className="table-skeleton-bar badge shimmer"></div></td>
+          <td>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="table-skeleton-bar id shimmer" style={{ height: '24px', width: '24px', borderRadius: '6px' }}></div>
+              <div className="table-skeleton-bar id shimmer" style={{ height: '24px', width: '24px', borderRadius: '6px' }}></div>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </>
+  );
 
   return (
     <div className="admin-container">
@@ -60,7 +78,7 @@ const AdminCitas = () => {
             </tr>
           </thead>
           <tbody>
-            {citas.map(c => (
+            {loading ? renderTableSkeletons() : citas.map(c => (
               <tr key={c.id}>
                 <td>#{c.id}</td>
                 <td>{c.fecha} {c.horaInicio && c.horaInicio.slice(0,5)}</td>

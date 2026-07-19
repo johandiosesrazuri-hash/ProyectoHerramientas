@@ -192,6 +192,18 @@
   display: flex;
   flex-direction: column;
   cursor: pointer;
+  animation: cardFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes cardFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 .doctor-card::before {
@@ -644,3 +656,86 @@
     min-height: 250px;
   }
 }
+
+/* ============================================
+   PREMIUM SHIMMER & SKELETON ANIMATIONS
+   ============================================ */
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    #f3f4f6 25%,
+    #e5e7eb 50%,
+    #f3f4f6 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmerAnim 1.5s infinite linear;
+}
+
+@keyframes shimmerAnim {
+  0% {
+    background-position: 200% 0;
+  }
+  100% {
+    background-position: -200% 0;
+  }
+}
+
+/* Page / Panel transitions */
+.view-fade-in {
+  animation: fadeInUp 0.45s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Doctor card skeleton loader */
+.skeleton-card {
+  background: white;
+  border-radius: 18px;
+  padding: 24px;
+  border: 1px solid rgba(42, 125, 225, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+}
+
+.skeleton-title {
+  height: 22px;
+  width: 70%;
+  border-radius: 6px;
+}
+
+.skeleton-subtitle {
+  height: 14px;
+  width: 45%;
+  border-radius: 4px;
+  margin-top: 8px;
+}
+
+.skeleton-line {
+  height: 14px;
+  width: 90%;
+  border-radius: 4px;
+}
+
+.skeleton-line.short {
+  width: 60%;
+}
+
+.skeleton-status {
+  height: 32px;
+  width: 100%;
+  border-radius: 8px;
+  margin-top: 8px;
+}
+

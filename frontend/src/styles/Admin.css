@@ -200,3 +200,64 @@
 .admin-error {
   color: #ef4444;
 }
+
+/* ============================================
+   ADMIN SKELETON LOADERS
+   ============================================ */
+
+.table-skeleton-bar {
+  height: 16px;
+  border-radius: 4px;
+  width: 75%;
+}
+
+.table-skeleton-bar.id {
+  width: 32px;
+}
+
+.table-skeleton-bar.short {
+  width: 50%;
+}
+
+.table-skeleton-bar.badge {
+  width: 70px;
+  height: 22px;
+  border-radius: 20px;
+}
+
+.admin-dashboard-skeleton {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+}
+
+.admin-skeleton-stat-card {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  border: 1px solid rgba(0,0,0,0.05);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.admin-skeleton-stat-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+}
+
+.admin-skeleton-stat-title {
+  height: 14px;
+  width: 60%;
+  border-radius: 4px;
+}
+
+.admin-skeleton-stat-val {
+  height: 28px;
+  width: 30%;
+  border-radius: 6px;
+}
+

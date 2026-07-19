@@ -143,8 +143,6 @@ const AdminHorarios = () => {
     }
   };
 
-  if (loading) return <div className="admin-loading">Cargando gestión de horarios...</div>;
-
   // Inline styles to prevent style leak
   const styles = {
     grid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '24px', marginTop: '20px' },
@@ -184,10 +182,11 @@ const AdminHorarios = () => {
             id="doctorSelector"
             value={selectedDoctorId}
             onChange={e => setSelectedDoctorId(e.target.value)}
+            disabled={loading}
             style={{ padding: '10px', borderRadius: '8px', border: '1px solid #cbd5e1', background: 'white', minWidth: '250px' }}
           >
-            <option value="">-- Seleccione un doctor --</option>
-            {doctores.map(doc => (
+            <option value="">{loading ? 'Cargando médicos...' : '-- Seleccione un doctor --'}</option>
+            {!loading && doctores.map(doc => (
               <option key={doc.id} value={doc.id}>{doc.nombre} ({doc.especialidad})</option>
             ))}
           </select>

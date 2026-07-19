@@ -3,6 +3,7 @@ import { doctorService } from '../services/doctorService';
 import AppointmentModal from './AppointmentModal';
 import HistorialCitas from './HistorialCitas';
 import Perfil from './Perfil';
+import Especialidades from './Especialidades';
 import Sidebar from './Sidebar';
 import logoSkipline from '../assets/images/logo.png';
 import '../styles/Dashboard.css';
@@ -33,9 +34,20 @@ const Dashboard = (props) => {
 
   const [especialidadesList, setEspecialidadesList] = useState(['Todas']);
 
+  const [debouncedSearch, setDebouncedSearch] = useState('');
+
+  // Debounce para evitar llamadas repetidas y parpadeos al escribir
+  useEffect(() => {
+    const handler = setTimeout(() => {
+      setDebouncedSearch(search);
+    }, 300);
+
+    return () => clearTimeout(handler);
+  }, [search]);
+
   useEffect(() => {
     loadDoctores();
-  }, [search, especialidad]);
+  }, [debouncedSearch, especialidad]);
 
   useEffect(() => {
     loadEspecialidades();
@@ -65,7 +77,7 @@ const Dashboard = (props) => {
       setLoading(true);
       setError('');
       const payload = await doctorService.listDoctors({
-        search: search.trim() || undefined,
+        search: debouncedSearch.trim() || undefined,
         especialidad: especialidad === 'Todas' ? undefined : especialidad
       });
       setDoctores(Array.isArray(payload) ? payload : []);
@@ -80,6 +92,25 @@ const Dashboard = (props) => {
   const doctoresDisponibles = useMemo(
     () => doctores.filter((doctor) => doctor.estado === 'DISPONIBLE').length,
     [doctores]
+  );
+
+  const renderDoctorSkeletons = () => (
+    <>
+      {[1, 2, 3].map((n) => (
+        <div key={n} className="skeleton-card">
+          <div>
+            <div className="skeleton-title shimmer"></div>
+            <div className="skeleton-subtitle shimmer"></div>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+            <div className="skeleton-line shimmer"></div>
+            <div className="skeleton-line shimmer"></div>
+            <div className="skeleton-line short shimmer"></div>
+          </div>
+          <div className="skeleton-status shimmer"></div>
+        </div>
+      ))}
+    </>
   );
 
   const formatProximaCita = (doctor) => {
@@ -173,7 +204,7 @@ const Dashboard = (props) => {
       </section>
 
       <section className="doctores-grid">
-        {loading && <p className="panel-state">Cargando doctores...</p>}
+        {loading && renderDoctorSkeletons()}
         {!loading && error && <p className="panel-state panel-error">{error}</p>}
         {!loading && !error && doctores.length === 0 && (
           <p className="panel-state">No hay doctores para mostrar.</p>
@@ -197,7 +228,6 @@ const Dashboard = (props) => {
                 <h2>{doctor.nombre}</h2>
                 <p className="especialidad">{doctor.especialidad}</p>
               </div>
-              <span className="rating">#{doctor.id}</span>
             </div>
 
             <ul className="doctor-meta">
@@ -231,6 +261,14 @@ const Dashboard = (props) => {
         return <AdminEspecialidades />;
       case 'doctor-citas':
         return <DoctorCitas />;
+
+      case 'especialidades':
+        return (
+          <Especialidades
+            onNavigateToDoctor={(doctor) => handleOpenModal(doctor)}
+          />
+        );
+        
       case 'perfil':
         return <Perfil />;
 
@@ -376,7 +414,9 @@ const Dashboard = (props) => {
           </div>
         </header>
 
-        {renderContent()}
+        <div key={currentView} className="view-fade-in">
+          {renderContent()}
+        </div>
 
         {/* Modal de Citas */}
         <AppointmentModal

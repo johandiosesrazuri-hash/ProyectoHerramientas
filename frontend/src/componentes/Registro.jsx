@@ -137,12 +137,12 @@ const Registro = (props) => {
         <section className="auth-form-panel">
           <form onSubmit={handleRegistroSubmit} className="auth-form">
             <img src={logoSkipline} alt="Skipline Logo" className="form-logo" />
-            <h2>Crear Cuenta</h2>
+            <h2 className="animate-delay-1">Crear Cuenta</h2>
 
             {error && <div className="alert alert-error">{error}</div>}
             {success && <div className="alert alert-success">{success}</div>}
 
-            <div className="form-group">
+            <div className="form-group animate-delay-2">
               <label htmlFor="nombre">Nombre Completo</label>
               <input
                 type="text"
@@ -156,7 +156,7 @@ const Registro = (props) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group animate-delay-3">
               <label htmlFor="email">Email</label>
               <input
                 type="email"
@@ -170,7 +170,7 @@ const Registro = (props) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group animate-delay-4">
               <label htmlFor="password">Contraseña</label>
               <input
                 type="password"
@@ -184,7 +184,7 @@ const Registro = (props) => {
               />
             </div>
 
-            <div className="form-group">
+            <div className="form-group animate-delay-5">
               <label htmlFor="passwordConfirm">Confirmar Contraseña</label>
               <input
                 type="password"
@@ -200,13 +200,13 @@ const Registro = (props) => {
 
             <button
               type="submit"
-              className="btn btn-primary btn-block"
+              className="btn btn-primary btn-block animate-delay-6"
               disabled={loading}
             >
               {loading ? 'Registrando...' : 'Registrarse'}
             </button>
 
-            <p className="auth-switch-text">
+            <p className="auth-switch-text animate-delay-6">
               ¿Ya tienes cuenta?{' '}
               <button
                 type="button"

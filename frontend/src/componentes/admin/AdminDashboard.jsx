@@ -45,7 +45,25 @@ const AdminDashboard = () => {
     }
   };
 
-  if (loading) return <div className="admin-loading">Cargando dashboard...</div>;
+  const renderDashboardSkeletons = () => (
+    <div className="admin-container">
+      <div className="admin-header">
+        <h2>Panel de Administración</h2>
+        <p>Resumen general del sistema de citas clínicas</p>
+      </div>
+      <div className="admin-dashboard-skeleton">
+        {[1, 2, 3, 4].map((n) => (
+          <div key={n} className="admin-skeleton-stat-card">
+            <div className="admin-skeleton-stat-icon shimmer"></div>
+            <div className="admin-skeleton-stat-title shimmer"></div>
+            <div className="admin-skeleton-stat-val shimmer"></div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+
+  if (loading) return renderDashboardSkeletons();
   if (error) return <div className="admin-error">{error}</div>;
   if (!stats) return null;
 
