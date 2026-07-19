@@ -8,7 +8,13 @@ import {
   faCircleQuestion,
   faRightFromBracket,
   faChevronLeft,
-  faChevronRight
+  faChevronRight,
+  faChartLine,
+  faUsersGear,
+  faStethoscope,
+  faClock,
+  faCalendarCheck,
+  faHospitalUser
 } from '@fortawesome/pro-solid-svg-icons';
 import '../styles/Sidebar.css';
 import '../styles/AppointmentModal.css';
@@ -60,12 +66,12 @@ const Sidebar = ({ onLogout, onNavigate }) => {
   ];
 
   const adminOptions = [
-    { id: 'admin-dashboard', label: 'Dashboard Admin', icon: '📊' },
-    { id: 'admin-usuarios', label: 'Gestión Usuarios', icon: '👥' },
-    { id: 'admin-doctores', label: 'Gestión Médicos', icon: '🩺' },
-    { id: 'admin-horarios', label: 'Gestión Horarios', icon: '🕒' },
-    { id: 'admin-citas', label: 'Monitor Citas', icon: '📅' },
-    { id: 'admin-especialidades', label: 'Especialidades', icon: '🏥' }
+    { id: 'admin-dashboard', label: 'Dashboard Admin', icon: faChartLine },
+    { id: 'admin-usuarios', label: 'Gestión Usuarios', icon: faUsersGear },
+    { id: 'admin-doctores', label: 'Gestión Médicos', icon: faStethoscope },
+    { id: 'admin-horarios', label: 'Gestión Horarios', icon: faClock },
+    { id: 'admin-citas', label: 'Monitor Citas', icon: faCalendarCheck },
+    { id: 'admin-especialidades', label: 'Especialidades', icon: faHospitalUser }
   ];
 
   const userRole = JSON.parse(localStorage.getItem('user') || '{}')?.rol;
@@ -93,11 +99,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
             title={option.label}
           >
             <span className="menu-icon">
-              {typeof option.icon === 'string' ? (
-                option.icon
-              ) : (
-                <FontAwesomeIcon icon={option.icon} />
-              )}
+              <FontAwesomeIcon icon={option.icon} />
             </span>
             <span className={`menu-label ${!isOpen && 'hidden'}`}>
               {option.label}
@@ -112,7 +114,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
           onClick={handleLogout}
           title="Cerrar sesión"
         >
-          <span className="menu-icon">🚪</span>
+          <span className="menu-icon"><FontAwesomeIcon icon={faRightFromBracket} /></span>
           <span className={`menu-label ${!isOpen && 'hidden'}`}>
             Cerrar Sesión
           </span>

@@ -54,6 +54,19 @@ public class DoctorService {
                 .toList();
     }
 
+    @Transactional(readOnly = true)
+    public List<LocalDate> getDoctorAvailableDates(Long doctorId, LocalDate desde) {
+        List<Slot> slots = slotRepository.findByDoctorIdAndEstadoAndFechaGreaterThanEqualOrderByFechaAscHoraInicioAsc(
+                doctorId,
+                SlotEstado.DISPONIBLE,
+                desde
+        );
+        return slots.stream()
+                .map(Slot::getFecha)
+                .distinct()
+                .toList();
+    }
+
     @Transactional
     public DoctorListResponse createDoctor(CreateDoctorRequest request) {
         Doctor doctor = new Doctor();

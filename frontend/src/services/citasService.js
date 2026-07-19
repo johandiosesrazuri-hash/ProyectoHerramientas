@@ -30,6 +30,36 @@ export const obtenerSlotsDisponibles = async (doctorId, fecha) => {
   return slots;
 };
 
+export const obtenerFechasDisponibles = async (doctorId, desde) => {
+  if (!doctorId) {
+    throw new Error('doctorId es requerido');
+  }
+
+  const endpoint = `${BASE_URL}/doctores/${doctorId}/disponibilidad`;
+  const queryParams = new URLSearchParams();
+  if (desde) queryParams.append('desde', desde);
+
+  const response = await fetch(`${endpoint}?${queryParams.toString()}`, {
+    method: 'GET',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${localStorage.getItem('authToken') || ''}`
+    }
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    throw new Error(errorData.message || `Error ${response.status}: No se pudieron cargar las fechas disponibles`);
+  }
+
+  const fechas = await response.json();
+  if (!Array.isArray(fechas)) {
+    throw new Error('Formato de respuesta inválido');
+  }
+
+  return fechas;
+};
+
 export const obtenerDoctores = async (search, especialidad) => {
   const endpoint = `${BASE_URL}/doctores`;
   const queryParams = new URLSearchParams();
@@ -110,7 +140,8 @@ export const crearCita = async (datoCita) => {
 export default {
   obtenerSlotsDisponibles,
   obtenerDoctores,
-  crearCita
+  crearCita,
+  obtenerFechasDisponibles
 };
 
 export const obtenerHistorial = async ({ search, estado } = {}) => {

@@ -150,7 +150,27 @@ const AdminDoctores = ({ onNavigate }) => {
     }
   };
 
-  if (loading) return <div className="admin-loading">Cargando doctores...</div>;
+  const renderTableSkeletons = () => (
+    <>
+      {[1, 2, 3, 4, 5].map((n) => (
+        <tr key={n}>
+          <td><div className="table-skeleton-bar id shimmer"></div></td>
+          <td><div className="table-skeleton-bar shimmer" style={{ width: '70%' }}></div></td>
+          <td><div className="table-skeleton-bar shimmer"></div></td>
+          <td><div className="table-skeleton-bar short shimmer"></div></td>
+          <td><div className="table-skeleton-bar id shimmer" style={{ width: '20px' }}></div></td>
+          <td><div className="table-skeleton-bar badge shimmer"></div></td>
+          <td>
+            <div style={{ display: 'flex', gap: '8px' }}>
+              <div className="table-skeleton-bar id shimmer" style={{ height: '24px', width: '24px', borderRadius: '6px' }}></div>
+              <div className="table-skeleton-bar id shimmer" style={{ height: '24px', width: '24px', borderRadius: '6px' }}></div>
+              <div className="table-skeleton-bar id shimmer" style={{ height: '24px', width: '24px', borderRadius: '6px' }}></div>
+            </div>
+          </td>
+        </tr>
+      ))}
+    </>
+  );
 
   return (
     <div className="admin-container">
@@ -161,7 +181,7 @@ const AdminDoctores = ({ onNavigate }) => {
 
       <div className="admin-toolbar">
         <div></div>
-        <button className="admin-btn-primary" onClick={handleOpenCreateModal}>
+        <button className="admin-btn-primary" onClick={handleOpenCreateModal} disabled={loading}>
           <Plus size={18} />
           Nuevo Médico
         </button>
@@ -181,7 +201,7 @@ const AdminDoctores = ({ onNavigate }) => {
             </tr>
           </thead>
           <tbody>
-            {doctores.map(d => (
+            {loading ? renderTableSkeletons() : doctores.map(d => (
               <tr key={d.id}>
                 <td>#{d.id}</td>
                 <td>{d.nombre}</td>

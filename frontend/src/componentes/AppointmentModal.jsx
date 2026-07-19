@@ -2,6 +2,9 @@ import { useState, useEffect } from 'react';
 import citasService from '../services/citasService';
 import '../styles/AppointmentModal.css';
 
+// Formatea "HH:mm:ss" o "HH:mm" a "HH:mm"
+const formatTime = (t) => (t ? t.slice(0, 5) : '');
+
 const AppointmentModal = ({ isOpen, onClose, doctor }) => {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [selectedSlot, setSelectedSlot] = useState(null);
@@ -9,11 +12,58 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
   const [cargandoHorarios, setCargandoHorarios] = useState(false);
   const [errorHorarios, setErrorHorarios] = useState(null);
   
-  // Estados para la reserva
   const [motivo, setMotivo] = useState('');
   const [cargandoReserva, setCargandoReserva] = useState(false);
   const [mensajeExito, setMensajeExito] = useState(null);
   const [mensajeError, setMensajeError] = useState(null);
+  const [availableDates, setAvailableDates] = useState([]);
+
+  // Estados para animación de entrada/salida
+  const [shouldRender, setShouldRender] = useState(isOpen);
+  const [animationClass, setAnimationClass] = useState('');
+  const [activeDoctor, setActiveDoctor] = useState(doctor);
+
+  useEffect(() => {
+    if (doctor) {
+      setActiveDoctor(doctor);
+    }
+  }, [doctor]);
+
+  const currentDoctor = activeDoctor || doctor || {};
+
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const timer = setTimeout(() => setAnimationClass('active'), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimationClass('');
+      const timer = setTimeout(() => setShouldRender(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  // Cargar fechas con disponibilidad real del doctor para el mes actual
+  useEffect(() => {
+    if (!isOpen || !doctor?.id) return;
+
+    const cargarFechasDisponibles = async () => {
+      try {
+        const firstDayOfMonth = new Date(selectedDate.getFullYear(), selectedDate.getMonth(), 1);
+        const year = firstDayOfMonth.getFullYear();
+        const month = String(firstDayOfMonth.getMonth() + 1).padStart(2, '0');
+        const day = String(firstDayOfMonth.getDate()).padStart(2, '0');
+        const fechaFormato = `${year}-${month}-${day}`;
+
+        const fechas = await citasService.obtenerFechasDisponibles(doctor.id, fechaFormato);
+        setAvailableDates(fechas);
+      } catch (error) {
+        console.error('Error al cargar fechas disponibles:', error);
+      }
+    };
+
+    cargarFechasDisponibles();
+  }, [isOpen, doctor?.id, selectedDate.getMonth(), selectedDate.getFullYear()]);
 
   const getDaysInMonth = (date) => {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
@@ -58,9 +108,9 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
 
         const horariosTransformados = slotsDelBackend.map((slot) => ({
           id: slot.id,
-          time: slot.horaInicio,
+          time: formatTime(slot.horaInicio),
+          horaFin: formatTime(slot.horaFin),
           available: slot.estado === 'DISPONIBLE',
-          horaFin: slot.horaFin
         }));
 
         setHorarios(horariosTransformados);
@@ -158,7 +208,11 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
   };
 
   const isDateAvailable = (date) => {
-    return true; // Habilitamos todos los días, la disponibilidad real se obtiene de la API de slots
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    const fechaFormato = `${year}-${month}-${day}`;
+    return availableDates.includes(fechaFormato);
   };
 
   const isDateSelected = (date) => {
@@ -204,25 +258,23 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
     return days;
   };
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   return (
-    <div className="appointment-modal-overlay" onClick={onClose}>
+    <div className={`appointment-modal-overlay ${animationClass}`} onClick={onClose}>
       <div className="appointment-modal" onClick={(e) => e.stopPropagation()}>
         <button className="modal-close-btn" onClick={onClose} aria-label="Cerrar modal">✕</button>
 
         <div className="modal-header">
           <div className="doctor-info">
-            <img
-              src={doctor.image || 'https://via.placeholder.com/80'}
-              alt={doctor.name}
-              className="doctor-image"
-            />
+            <div className="doctor-avatar-modal">
+              {(currentDoctor.name || '??').split(' ').map(w => w[0]).join('').slice(0, 2)}
+            </div>
             <div className="doctor-details">
-              <h2 className="doctor-name">{doctor.name}</h2>
-              <p className="doctor-specialty">{doctor.specialty}</p>
+              <h2 className="doctor-name">{currentDoctor.name}</h2>
+              <p className="doctor-specialty">{currentDoctor.specialty}</p>
               <p className="doctor-office">
-                <span className="office-icon"></span> {doctor.office}
+                <span className="office-icon"></span> {currentDoctor.office}
               </p>
             </div>
           </div>
@@ -261,16 +313,6 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
               {renderCalendarDays()}
             </div>
 
-            <div className="calendar-legend">
-              <div className="legend-item">
-                <div className="legend-color available"></div>
-                <span>Disponible</span>
-              </div>
-              <div className="legend-item">
-                <div className="legend-color unavailable"></div>
-                <span>No disponible</span>
-              </div>
-            </div>
           </div>
 
           <div className="timeslots-section">
@@ -280,7 +322,13 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
             </p>
 
             <div className="timeslots-grid">
-              {cargandoHorarios && <p className="timeslot-loading">Cargando horarios...</p>}
+              {cargandoHorarios && (
+                <>
+                  {[1, 2, 3, 4, 5, 6].map((n) => (
+                    <div key={n} className="timeslot-card-skeleton shimmer"></div>
+                  ))}
+                </>
+              )}
               {!cargandoHorarios && errorHorarios && <p className="timeslot-error">{errorHorarios}</p>}
               {!cargandoHorarios && horarios.map((slot) => (
                 <button
@@ -290,6 +338,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
                   disabled={!slot.available}
                 >
                   <span className="timeslot-time">{slot.time}</span>
+                  <span className="timeslot-range">a {slot.horaFin}</span>
                   {!slot.available && <span className="timeslot-status">Ocupado</span>}
                 </button>
               ))}
@@ -305,11 +354,11 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
               <div className="summary-content">
                 <div className="summary-row">
                   <span className="summary-label">Doctor:</span>
-                  <span className="summary-value">{doctor.name}</span>
+                  <span className="summary-value">{currentDoctor.name}</span>
                 </div>
                 <div className="summary-row">
                   <span className="summary-label">Especialidad:</span>
-                  <span className="summary-value">{doctor.specialty}</span>
+                  <span className="summary-value">{currentDoctor.specialty}</span>
                 </div>
                 <div className="summary-row">
                   <span className="summary-label">Fecha:</span>
@@ -321,7 +370,7 @@ const AppointmentModal = ({ isOpen, onClose, doctor }) => {
                   <div className="summary-row">
                     <span className="summary-label">Hora:</span>
                     <span className="summary-value">
-                      {horarios.find(h => h.id === selectedSlot).time}
+                      {horarios.find(h => h.id === selectedSlot).time} - {horarios.find(h => h.id === selectedSlot).horaFin}
                     </span>
                   </div>
                 )}
