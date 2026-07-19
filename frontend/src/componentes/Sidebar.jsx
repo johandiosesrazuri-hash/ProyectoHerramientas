@@ -25,8 +25,10 @@ const Sidebar = ({ onLogout, onNavigate }) => {
     }
   };
 
-  const handleLogoutClick = () => {
-    setIsLogoutModalOpen(true);
+  const handleLogout = () => {
+    if (window.confirm('¿Estás seguro de que deseas cerrar sesión?')) {
+      onLogout();
+    }
   };
 
   const menuOptions = [
@@ -83,14 +85,20 @@ const Sidebar = ({ onLogout, onNavigate }) => {
       </div>
 
       <nav className="sidebar-nav">
-        {menuOptions.map((option) => (
+        {optionsToRender.map((option) => (
           <button
             key={option.id}
             className={`menu-item ${activeOption === option.id ? 'active' : ''}`}
             onClick={() => handleOptionClick(option.id)}
             title={option.label}
           >
-            <span className="menu-icon">{option.icon}</span>
+            <span className="menu-icon">
+              {typeof option.icon === 'string' ? (
+                option.icon
+              ) : (
+                <FontAwesomeIcon icon={option.icon} />
+              )}
+            </span>
             <span className={`menu-label ${!isOpen && 'hidden'}`}>
               {option.label}
             </span>

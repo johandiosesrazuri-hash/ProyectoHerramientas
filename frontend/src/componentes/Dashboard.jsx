@@ -210,12 +210,6 @@ const Dashboard = (props) => {
           </article>
         ))}
       </section>
-
-      <section className="notice-box">
-        <p>
-          Solo se muestra informacion de doctores desde base de datos. Citas y horarios todavia no se gestionan desde esta vista.
-        </p>
-      </section>
     </>
   );
 
