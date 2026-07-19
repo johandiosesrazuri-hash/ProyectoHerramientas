@@ -82,7 +82,7 @@ const Sidebar = ({ onLogout, onNavigate }) => {
   const userRole = JSON.parse(localStorage.getItem('user') || '{}')?.rol;
   let optionsToRender = menuOptions;
   if (userRole === 'ADMIN') {
-    optionsToRender = [...adminOptions, ...menuOptions];
+    optionsToRender = [...adminOptions, menuOptions.find(opt => opt.id === 'perfil')];
   } else if (userRole === 'MEDICO') {
     optionsToRender = medicoOptions;
   }
