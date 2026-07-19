@@ -12,6 +12,8 @@ import AdminDoctores from './admin/AdminDoctores';
 import AdminCitas from './admin/AdminCitas';
 import AdminEspecialidades from './admin/AdminEspecialidades';
 import AdminHorarios from './admin/AdminHorarios';
+import Soporte from './Soporte';
+import { supportService } from '../services/supportService';
 
 const Dashboard = (props) => {
   const [doctores, setDoctores] = useState([]);
@@ -108,7 +110,7 @@ const Dashboard = (props) => {
     setCurrentView(view);
   };
 
-  const handleAyudaSubmit = (event) => {
+  const handleAyudaSubmit = async (event) => {
     event.preventDefault();
     setAyudaSuccess('');
     setAyudaError('');
@@ -118,12 +120,24 @@ const Dashboard = (props) => {
       return;
     }
 
-    setAyudaSuccess('Tu mensaje ha sido enviado. Nuestro equipo de soporte te responderá a la brevedad.');
-    setAyudaNombre('');
-    setAyudaEmail('');
-    setAyudaTipo('cita');
-    setAyudaMensaje('');
+    try {
+      const user = JSON.parse(localStorage.getItem('user') || '{}');
+      const asunto = `${ayudaTipo === 'cita' ? 'Cita' : ayudaTipo === 'acceso' ? 'Acceso' : ayudaTipo === 'pago' ? 'Pago' : 'Consulta'}: ${ayudaNombre}`;
+      await supportService.createTicket({
+        asunto,
+        mensaje: `${ayudaMensaje}\n\nCorreo: ${ayudaEmail}\nTipo: ${ayudaTipo}\nUsuario: ${user.nombre || 'Paciente'}`
+      });
+      setAyudaSuccess('Tu mensaje ha sido enviado y se creó un ticket de soporte.');
+      setAyudaNombre('');
+      setAyudaEmail('');
+      setAyudaTipo('cita');
+      setAyudaMensaje('');
+    } catch (err) {
+      setAyudaError(err.message || 'No se pudo crear el ticket de soporte.');
+    }
   };
+
+  const isSupportActive = currentView === 'soporte';
 
   const renderMedicosView = () => (
     <>
@@ -253,6 +267,9 @@ const Dashboard = (props) => {
             </div>
           </section>
         );
+
+      case 'soporte':
+        return <Soporte />;
 
       case 'ayuda':
         return (
@@ -410,6 +427,18 @@ const Dashboard = (props) => {
             <div className="brand-text">
               <p>Sistema de Gestion de Citas Médicas</p>
             </div>
+          </div>
+
+          <div className="topbar-actions">
+            <button
+              type="button"
+              className={`support-action-btn ${isSupportActive ? 'active' : ''}`}
+              onClick={() => handleNavigate('soporte')}
+              aria-label="Abrir mensajes de soporte"
+            >
+              <span className="support-icon">💬</span>
+              <span className="support-label">Mensajes</span>
+            </button>
           </div>
         </header>
 

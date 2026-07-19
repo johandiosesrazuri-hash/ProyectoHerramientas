@@ -51,7 +51,9 @@ const Sidebar = ({ onLogout, onNavigate }) => {
   ];
 
   const userRole = JSON.parse(localStorage.getItem('user') || '{}')?.rol;
-  const optionsToRender = userRole === 'ADMIN' ? [...adminOptions, ...menuOptions] : menuOptions;
+  const optionsToRender = userRole === 'ADMIN'
+    ? [...adminOptions, ...menuOptions]
+    : [...menuOptions];
 
   return (
     <>
